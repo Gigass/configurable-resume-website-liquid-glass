@@ -25,7 +25,7 @@ body {
   min-height: 100vh;
   color: var(--color-text);
   background: var(--color-background);
-  background-image: url('/background-liquid.jpg');
+  background-image: url('/src/assets/bac.png');
   background-size: 500px;
   background-position: center;
   line-height: 1.6;
@@ -123,4 +123,15 @@ a:hover {
 }
 .liquidGlass-btn:active {
   color: #0070e0;
+}
+
+.liquidGlass-wrapper,
+.liquidGlass-effect,
+.liquidGlass-tint,
+.liquidGlass-shine,
+.liquidGlass-text {
+  border-radius: 2rem !important;
+}
+.liquidGlass-wrapper {
+  overflow: hidden;
 }
