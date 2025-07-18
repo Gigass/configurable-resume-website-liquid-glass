@@ -1,7 +1,7 @@
 <template>
   <div class="resume-view">
     <svg width="0" height="0">
-      <filter id="glass-distortion-resume">
+      <filter id="glass-distortion-global">
         <feTurbulence type="fractalNoise" baseFrequency="0.05 0.05" numOctaves="3" result="turbulence" />
         <feDisplacementMap in="SourceGraphic" in2="turbulence" scale="10" xChannelSelector="R" yChannelSelector="G" />
       </filter>
@@ -11,7 +11,7 @@
 
     <!-- 基本信息 -->
     <div class="resume-section liquidGlass-wrapper">
-      <div class="liquidGlass-effect" style="filter: url(#glass-distortion-resume)"></div>
+      <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
       <div class="liquidGlass-tint"></div>
       <div class="liquidGlass-shine"></div>
       <div class="liquidGlass-text">
@@ -33,7 +33,7 @@
 
     <!-- 个人优势 -->
     <div class="resume-section liquidGlass-wrapper">
-      <div class="liquidGlass-effect" style="filter: url(#glass-distortion-resume)"></div>
+      <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
       <div class="liquidGlass-tint"></div>
       <div class="liquidGlass-shine"></div>
       <div class="liquidGlass-text">
@@ -53,7 +53,7 @@
 
     <!-- 工作经历 -->
     <div class="resume-section liquidGlass-wrapper">
-      <div class="liquidGlass-effect" style="filter: url(#glass-distortion-resume)"></div>
+      <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
       <div class="liquidGlass-tint"></div>
       <div class="liquidGlass-shine"></div>
       <div class="liquidGlass-text">
@@ -115,7 +115,7 @@
 
     <!-- 项目经历（简要） -->
     <div class="resume-section liquidGlass-wrapper">
-      <div class="liquidGlass-effect" style="filter: url(#glass-distortion-resume)"></div>
+      <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
       <div class="liquidGlass-tint"></div>
       <div class="liquidGlass-shine"></div>
       <div class="liquidGlass-text">
@@ -132,7 +132,7 @@
 
     <!-- 教育经历 -->
     <div class="resume-section liquidGlass-wrapper">
-      <div class="liquidGlass-effect" style="filter: url(#glass-distortion-resume)"></div>
+      <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
       <div class="liquidGlass-tint"></div>
       <div class="liquidGlass-shine"></div>
       <div class="liquidGlass-text">
@@ -145,7 +145,7 @@
 
     <!-- 下载简历按钮 -->
     <div class="resume-download">
-      <button class="download-btn" disabled>下载PDF简历（敬请期待）</button>
+      <button class="liquidGlass-btn" disabled>下载PDF简历（敬请期待）</button>
     </div>
   </div>
 </template>
@@ -186,7 +186,7 @@
   z-index: 0;
   inset: 0;
   backdrop-filter: blur(3px);
-  filter: url(#glass-distortion-resume);
+  filter: url(#glass-distortion-global);
   overflow: hidden;
   isolation: isolate;
 }

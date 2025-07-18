@@ -8,7 +8,7 @@
     </svg>
 
     <div class="contact-card liquidGlass-wrapper">
-      <div class="liquidGlass-effect" style="filter: url(#glass-distortion-contact)"></div>
+      <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
       <div class="liquidGlass-tint"></div>
       <div class="liquidGlass-shine"></div>
       <div class="liquidGlass-text">
@@ -19,7 +19,7 @@
           <li><strong>邮箱：</strong>1547654938@qq.com</li>
         </ul>
         <div class="contact-social">
-          <a href="mailto:1547654938@qq.com" class="contact-btn">发送邮件</a>
+          <a href="mailto:1547654938@qq.com" class="liquidGlass-btn">发送邮件</a>
         </div>
       </div>
     </div>
@@ -57,7 +57,7 @@
   z-index: 0;
   inset: 0;
   backdrop-filter: blur(3px);
-  filter: url(#glass-distortion-contact);
+  filter: url(#glass-distortion-global);
   overflow: hidden;
   isolation: isolate;
 }

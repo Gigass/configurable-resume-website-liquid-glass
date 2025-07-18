@@ -24,7 +24,7 @@ import { RouterLink } from 'vue-router'
     </svg>
 
     <div class="hero-container liquidGlass-wrapper">
-      <div class="liquidGlass-effect"></div>
+      <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
       <div class="liquidGlass-tint"></div>
       <div class="liquidGlass-shine"></div>
       <div class="liquidGlass-text">
@@ -70,7 +70,7 @@ import { RouterLink } from 'vue-router'
   z-index: 0;
   inset: 0;
   backdrop-filter: blur(3px);
-  filter: url(#glass-distortion);
+  filter: url(#glass-distortion-global);
   overflow: hidden;
   isolation: isolate;
 }

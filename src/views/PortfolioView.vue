@@ -13,7 +13,7 @@
     <div class="portfolio-group">
       <h3>苏州中来光伏新材股份有限公司</h3>
       <div class="project-card liquidGlass-wrapper">
-        <div class="liquidGlass-effect" style="filter: url(#glass-distortion-portfolio)"></div>
+        <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
         <div class="liquidGlass-tint"></div>
         <div class="liquidGlass-shine"></div>
         <div class="liquidGlass-text">
@@ -27,7 +27,7 @@
         </div>
       </div>
       <div class="project-card liquidGlass-wrapper">
-        <div class="liquidGlass-effect" style="filter: url(#glass-distortion-portfolio)"></div>
+        <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
         <div class="liquidGlass-tint"></div>
         <div class="liquidGlass-shine"></div>
         <div class="liquidGlass-text">
@@ -41,7 +41,7 @@
         </div>
       </div>
       <div class="project-card liquidGlass-wrapper">
-        <div class="liquidGlass-effect" style="filter: url(#glass-distortion-portfolio)"></div>
+        <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
         <div class="liquidGlass-tint"></div>
         <div class="liquidGlass-shine"></div>
         <div class="liquidGlass-text">
@@ -58,7 +58,7 @@
     <div class="portfolio-group">
       <h3>魔元术（苏州）信息科技有限公司</h3>
       <div class="project-card liquidGlass-wrapper">
-        <div class="liquidGlass-effect" style="filter: url(#glass-distortion-portfolio)"></div>
+        <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
         <div class="liquidGlass-tint"></div>
         <div class="liquidGlass-shine"></div>
         <div class="liquidGlass-text">
@@ -72,7 +72,7 @@
         </div>
       </div>
       <div class="project-card liquidGlass-wrapper">
-        <div class="liquidGlass-effect" style="filter: url(#glass-distortion-portfolio)"></div>
+        <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
         <div class="liquidGlass-tint"></div>
         <div class="liquidGlass-shine"></div>
         <div class="liquidGlass-text">
@@ -85,7 +85,7 @@
         </div>
       </div>
       <div class="project-card liquidGlass-wrapper">
-        <div class="liquidGlass-effect" style="filter: url(#glass-distortion-portfolio)"></div>
+        <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
         <div class="liquidGlass-tint"></div>
         <div class="liquidGlass-shine"></div>
         <div class="liquidGlass-text">
@@ -102,7 +102,7 @@
     <div class="portfolio-group">
       <h3>其它项目</h3>
       <div class="project-card liquidGlass-wrapper">
-        <div class="liquidGlass-effect" style="filter: url(#glass-distortion-portfolio)"></div>
+        <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
         <div class="liquidGlass-tint"></div>
         <div class="liquidGlass-shine"></div>
         <div class="liquidGlass-text">
@@ -115,7 +115,7 @@
         </div>
       </div>
       <div class="project-card liquidGlass-wrapper">
-        <div class="liquidGlass-effect" style="filter: url(#glass-distortion-portfolio)"></div>
+        <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
         <div class="liquidGlass-tint"></div>
         <div class="liquidGlass-shine"></div>
         <div class="liquidGlass-text">
@@ -128,7 +128,7 @@
         </div>
       </div>
       <div class="project-card liquidGlass-wrapper">
-        <div class="liquidGlass-effect" style="filter: url(#glass-distortion-portfolio)"></div>
+        <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
         <div class="liquidGlass-tint"></div>
         <div class="liquidGlass-shine"></div>
         <div class="liquidGlass-text">

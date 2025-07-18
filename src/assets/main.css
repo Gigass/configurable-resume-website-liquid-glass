@@ -90,3 +90,37 @@ a:hover {
     min-height: 80vh;
   }
 }
+
+/* 液态玻璃按钮通用样式 */
+.liquidGlass-btn {
+  position: relative;
+  display: inline-block;
+  padding: 0.8rem 2.2rem;
+  border-radius: 2rem;
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: #222;
+  font-size: 1.1rem;
+  font-weight: 700;
+  box-shadow: 0 4px 24px 0 rgba(0,0,0,0.08);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  overflow: hidden;
+  transition: box-shadow 0.2s, color 0.2s;
+}
+.liquidGlass-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg,rgba(255,255,255,0.35) 0%,rgba(255,255,255,0.12) 100%);
+  z-index: 1;
+  pointer-events: none;
+  border-radius: 2rem;
+}
+.liquidGlass-btn:hover {
+  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.18);
+  color: #005cbf;
+}
+.liquidGlass-btn:active {
+  color: #0070e0;
+}

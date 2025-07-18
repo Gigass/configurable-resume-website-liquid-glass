@@ -21,7 +21,7 @@
 
     <!-- 基本信息卡片 -->
     <div class="glass-card liquidGlass-wrapper">
-      <div class="liquidGlass-effect"></div>
+      <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
       <div class="liquidGlass-tint"></div>
       <div class="liquidGlass-shine"></div>
       <div class="liquidGlass-text">
@@ -42,7 +42,7 @@
 
     <!-- 个人优势卡片 -->
     <div class="glass-card liquidGlass-wrapper">
-      <div class="liquidGlass-effect"></div>
+      <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
       <div class="liquidGlass-tint"></div>
       <div class="liquidGlass-shine"></div>
       <div class="liquidGlass-text">
@@ -62,7 +62,7 @@
 
     <!-- 工作经历卡片 -->
     <div class="glass-card liquidGlass-wrapper">
-      <div class="liquidGlass-effect"></div>
+      <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
       <div class="liquidGlass-tint"></div>
       <div class="liquidGlass-shine"></div>
       <div class="liquidGlass-text">
@@ -148,7 +148,7 @@
   z-index: 0;
   inset: 0;
   backdrop-filter: blur(3px);
-  filter: url(#glass-distortion-about);
+  filter: url(#glass-distortion-global);
   overflow: hidden;
   isolation: isolate;
 }
