@@ -1,0 +1,92 @@
+/* semantic color variables for this project */
+:root {
+  --color-background: #0d1117;
+  --color-text: rgba(235, 235, 235, 0.85);
+  --color-heading: #ffffff;
+  --color-primary: #58a6ff;
+  --color-border: #30363d;
+  --font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  font-weight: normal;
+  position: relative;
+}
+
+html, body, #app {
+  height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  color: var(--color-text);
+  background: var(--color-background);
+  background-image: url('/background-liquid.jpg');
+  background-size: 500px;
+  background-position: center;
+  line-height: 1.6;
+  font-family: var(--font-family-base);
+  font-size: 16px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  animation: moveBackground 120s linear infinite !important;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: -1;
+}
+
+#app {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+a {
+  text-decoration: none;
+  color: var(--color-primary);
+  transition: 0.4s;
+}
+
+a:hover {
+  filter: brightness(1.2);
+}
+
+@keyframes moveBackground {
+  from {
+    background-position: 0% 0%;
+  }
+  to {
+    background-position: 0% -1500%;
+  }
+}
+
+/* 强制所有页面背景动画速度一致 */
+.about-view,
+.portfolio-view,
+.resume-view,
+.contact-view {
+  animation: none !important;
+}
+
+@media (min-width: 1024px) {
+  .about-view,
+  .portfolio-view,
+  .resume-view,
+  .contact-view {
+    min-height: 80vh;
+  }
+}

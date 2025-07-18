@@ -1,0 +1,11 @@
+---
+timestamp: '2025-07-18T02:35:26.6NZ'
+user_prompt: '继续'
+---
+
+**[Goal]** Install project dependencies using npm.
+**[Artifact]**
+
+```command
+npm install
+``` 

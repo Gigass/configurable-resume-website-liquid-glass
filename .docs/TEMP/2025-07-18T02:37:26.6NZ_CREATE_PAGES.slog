@@ -1,0 +1,33 @@
+---
+timestamp: '2025-07-18T02:37:26.6NZ'
+user_prompt: '开始构建页面，先设计好几个页面框架，本页面主要适用于求职和个人能力展示的，基于此设计一些页面模块'
+---
+
+**[Goal]** Create the basic page structure for the personal website, including views, routing, and navigation links.
+**[Artifact]**
+
+```diff
+--- a/src/router/index.ts
++++ b/src/router/index.ts
+@@ -14,6 +14,21 @@
+       // which is lazy-loaded when the route is visited.
+       component: () => import('../views/AboutView.vue')
+     },
++    {
++      path: '/portfolio',
++      name: 'portfolio',
++      component: () => import('../views/PortfolioView.vue')
++    },
++    {
++      path: '/resume',
++      name: 'resume',
++      component: () => import('../views/ResumeView.vue')
++    },
++    {
++      path: '/contact',
++      name: 'contact',
++      component: () => import('../views/ContactView.vue')
++    }
+   ]
+ })
+``` 
