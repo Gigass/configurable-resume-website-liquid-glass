@@ -135,3 +135,10 @@ a:hover {
 .liquidGlass-wrapper {
   overflow: hidden;
 }
+
+.liquidGlass-tint {
+  z-index: 1;
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.15);
+}

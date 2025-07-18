@@ -58,6 +58,7 @@ import { RouterLink } from 'vue-router'
   text-align: center;
   max-width: 800px;
   border-radius: 2rem;
+  font-size: 1.18rem;
 }
 
 .liquidGlass-wrapper {
@@ -105,28 +106,28 @@ import { RouterLink } from 'vue-router'
 }
 
 .hero-title {
-  font-size: 4rem;
+  font-size: 4.3rem;
   font-weight: 700;
   color: #000000;
   margin-bottom: 0.5rem;
 }
 
 .hero-subtitle {
-  font-size: 1.5rem;
+  font-size: 1.7rem;
   font-weight: 400;
   color: #333333;
   margin-bottom: 1.5rem;
 }
 
 .hero-description {
-  font-size: 1.1rem;
+  font-size: 1.18rem;
   max-width: 600px;
   color: #333333;
   margin: 0 auto 2.5rem;
 }
 
 .hero-intro {
-  font-size: 1.08rem;
+  font-size: 1.15rem;
   color: #222;
   font-weight: 700;
   margin: 0 auto 2.2rem;
