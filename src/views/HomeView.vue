@@ -1,5 +1,51 @@
 <script setup lang="ts">
-import { RouterLink } from 'vue-router'
+import { RouterLink } from 'vue-router';
+// 引入 Swiper
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+
+const advantages = [
+  {
+    icon: '👨‍💻',
+    text: '<b>多次从零搭建核心技术平台与团队</b>，具备独立完成技术选型、架构设计和项目全流程管理的能力，高效推动项目上线和团队成长，助力企业实现数字化升级。',
+  },
+  {
+    icon: '🏭',
+    text: '深耕<b>制造业信息化与数字化转型</b>，主导SaaS平台、CRM、实验室管理等核心系统的规划与开发，擅长将复杂业务流程自动化、数据化、平台化，为企业持续转型赋能。',
+  },
+  {
+    icon: '💬',
+    text: '精通<b>企业微信管理与开发</b>，长期担任企业微信超级管理员，负责企业微信与OA、CRM、ERP等系统的深度集成开发，有效推动企业移动办公、消息协同和流程自动化落地。',
+  },
+  {
+    icon: '🧩',
+    text: '<b>技术栈全面</b>，精通Java及Spring全家桶、主流微服务架构，熟悉Golang，有丰富的高性能服务开发和系统优化经验；同时精于多种数据库、缓存、分布式任务和消息中间件，能灵活应对各类业务场景。',
+  },
+  {
+    icon: '☁️',
+    text: '熟练掌握<b>云原生技术与架构设计</b>，参与平台容器化改造、K8s日常运维、多租户和高可用SaaS架构设计，支持平台全球化部署及高效运维管理。',
+  },
+  {
+    icon: '📱',
+    text: '拥有<b>全栈开发能力</b>，熟悉JavaScript、移动端开发及微信小程序，擅长前后端分离项目推进和多端系统集成，提升业务协同效率和用户体验。',
+  },
+  {
+    icon: '🤖',
+    text: '拥有<b>AI与智能化平台研发经验</b>，参与智能机器人、AI数据平台等项目，推动AI技术与业务系统深度融合，助力企业智能决策和流程自动化。',
+  },
+  {
+    icon: '🚀',
+    text: '<b>学习能力强</b>，热爱新技术研究，善于快速掌握前沿工具并应用于实际项目中，能够高效分析和解决疑难问题，持续推动技术创新和项目优化。',
+  },
+];
+
+const skillTags = [
+  'Java', 'Spring', 'Vue3', 'Golang', 'K8s', 'SaaS', '微服务', '数据库', 'AI', '企业微信', '全栈', '云原生', '自动化', '数据可视化', '移动端',
+];
+
 </script>
 
 <template>
@@ -31,16 +77,66 @@ import { RouterLink } from 'vue-router'
         <p class="hero-description">
           致力于将复杂的业务流程自动化、数据化、平台化，为企业数字化转型持续赋能。
         </p>
-        <p class="hero-intro">
-          <b>
-            8年Java开发及系统架构经验，专注于制造业信息化与数字化转型。多年来，在多家制造业企业主导或参与SaaS平台、CRM系统、实验室管理等核心业务系统的规划与建设，擅长将制造企业的复杂流程实现自动化、数据化和智能化，助力企业实现高效运营与数字化升级。<br><br>
-            具备从零搭建核心技术平台和技术团队的能力，熟悉全流程项目管理和跨系统集成，精通Java、Spring全家桶、微服务架构，掌握企业微信集成、云原生技术及K8s集群运维，能够保障系统的高可用和全球化部署。同时具备全栈开发能力，能够高效推动前后端及多端平台的协同开发和集成。<br><br>
-            拥有丰富的制造业场景落地经验，包括客户管理、实验数据采集与管理、生产报价、采购决策、人力评估等核心业务系统开发，对企业业务流程有深入理解，能通过技术有效提升业务效率。具有AI与智能化平台建设实践，能够推动AI与制造业业务系统的深度融合，促进智能决策和管理自动化。<br><br>
-            具备较强的学习能力和技术创新意识，能够快速掌握新技术并应用于制造业实际业务场景，不断为企业创造技术价值。
-          </b>
-        </p>
-        <RouterLink to="/portfolio" class="liquidGlass-btn">查看我的作品</RouterLink>
       </div>
+    </div>
+
+    <!-- 从 AboutView 合并过来的内容 -->
+    <div class="about-content">
+      <!-- 优势区 -->
+      <div class="advantages-glass">
+        <swiper
+          :modules="[Navigation, Pagination, Autoplay]"
+          :slides-per-view="1"
+          :space-between="30"
+          loop
+          :autoplay="{
+            delay: 4000,
+            disableOnInteraction: false,
+          }"
+          :pagination="{
+            el: '.swiper-pagination',
+            clickable: true,
+          }"
+          :navigation="{
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          }"
+          class="advantages-carousel"
+        >
+          <swiper-slide v-for="(item, idx) in advantages" :key="idx">
+            <div class="adv-card liquidGlass-wrapper">
+              <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
+              <div class="liquidGlass-tint"></div>
+              <div class="liquidGlass-shine"></div>
+              <div class="liquidGlass-text adv-content">
+                <span class="adv-icon" v-html="item.icon"></span>
+                <span class="adv-text" v-html="item.text"></span>
+              </div>
+            </div>
+          </swiper-slide>
+        </swiper>
+        <!-- Swiper 自定义导航 -->
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+      </div>
+    </div>
+
+    <!-- 结尾技能区和CTA -->
+    <div class="final-section">
+      <!-- 技能标签区 -->
+      <div class="skills-section liquidGlass-wrapper">
+        <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
+        <div class="liquidGlass-tint"></div>
+        <div class="liquidGlass-shine"></div>
+        <div class="liquidGlass-text">
+          <h3>核心技能</h3>
+          <div class="skills-tags">
+            <span class="skill-tag" v-for="tag in skillTags" :key="tag">{{ tag }}</span>
+          </div>
+        </div>
+      </div>
+      <RouterLink to="/portfolio" class="liquidGlass-btn">查看我的作品</RouterLink>
     </div>
   </main>
 </template>
@@ -48,10 +144,13 @@ import { RouterLink } from 'vue-router'
 <style scoped>
 .home-view {
   display: flex;
+  flex-direction: column; /* 改为纵向排列 */
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start; /* 从顶部开始 */
+  gap: 3.5rem; /* 增加卡片间距 */
   flex-grow: 1;
-  min-height: 60vh;
+  min-height: 100vh; /* 确保至少一屏高 */
+  padding-bottom: 5rem; /* 底部留出空间 */
 }
 
 .hero-container {
@@ -59,6 +158,7 @@ import { RouterLink } from 'vue-router'
   max-width: 800px;
   border-radius: 2rem;
   font-size: 1.18rem;
+  margin-bottom: 0; /* 移除和下方内容的固定间距 */
 }
 
 .liquidGlass-wrapper {
@@ -102,7 +202,7 @@ import { RouterLink } from 'vue-router'
 .liquidGlass-text {
   z-index: 3;
   color: #1a1a1a;
-  padding: 3rem 4rem;
+  padding: 4rem 4rem;
 }
 
 .hero-title {
@@ -123,7 +223,7 @@ import { RouterLink } from 'vue-router'
   font-size: 1.18rem;
   max-width: 600px;
   color: #333333;
-  margin: 0 auto 2.5rem;
+  margin: 1.5rem auto 0; /* 调整与副标题的间距 */
 }
 
 .hero-intro {
@@ -157,5 +257,200 @@ import { RouterLink } from 'vue-router'
   transform: translateY(-3px);
   box-shadow: 0 4px 20px rgba(88, 166, 255, 0.3);
   filter: brightness(1.1);
+}
+
+.liquidGlass-btn {
+  display: inline-block;
+  margin-top: 2.5rem;
+  padding: 0.9rem 2.8rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #fff;
+  background-color: #005cbf;
+  border-radius: 2rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 92, 191, 0.4);
+}
+.liquidGlass-btn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 25px rgba(0, 92, 191, 0.5);
+  filter: brightness(1.15);
+}
+
+/* About Content Styles */
+.about-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  align-items: center;
+  width: 100%;
+  max-width: 900px;
+  /* 移除背景和边框，让卡片独立 */
+  position: relative; /* 为 Swiper 导航按钮定位 */
+}
+
+.advantages-glass {
+  width: 100%;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  padding: 0 4rem; /* 为导航按钮留出空间 */
+}
+
+.advantages-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.adv-card.liquidGlass-wrapper {
+  min-height: 280px; /* 调整卡片高度以适应内容 */
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0;
+  width: 100%;
+}
+
+.adv-card.liquidGlass-wrapper.is-visible {
+  /* 动画结束状态 */
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+}
+
+.adv-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.1rem;
+  font-size: 1.08rem;
+  font-weight: 500;
+  line-height: 1.7;
+  padding: 2.5rem 3rem;
+}
+
+.adv-icon {
+  font-size: 2.5rem; /* 增大图标 */
+  flex-shrink: 0;
+  margin-top: 0.2rem;
+}
+
+.adv-text b {
+  color: #005cbf;
+  font-weight: 700;
+  background: linear-gradient(90deg, #00c6fb 0%, #005cbf 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+}
+
+.skills-section {
+  width: 100%;
+}
+
+.skills-section h3 {
+  font-size: 1.2rem;
+  color: #005cbf;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  text-align: center; /* 居中标题 */
+}
+
+.skills-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* 居中标签 */
+  gap: 0.7rem;
+}
+
+.skill-tag {
+  display: inline-block;
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: #005cbf;
+  font-weight: 700;
+  border-radius: 1.2rem;
+  padding: 0.4rem 1.2rem;
+  font-size: 1rem;
+  margin-bottom: 0.2rem;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.06);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transition: background 0.2s;
+}
+
+.skill-tag:hover {
+  background: #005cbf;
+  color: #fff;
+}
+
+.final-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+  width: 100%;
+  max-width: 900px;
+  margin-top: 3rem;
+}
+
+/* Swiper-specific styles */
+.advantages-carousel {
+  width: 100%;
+  overflow: visible; /* 让卡片阴影不被裁剪 */
+}
+
+:deep(.swiper-pagination-bullet) {
+  width: 12px;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(0, 92, 191, 0.4);
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
+
+:deep(.swiper-pagination-bullet-active) {
+  background: #005cbf;
+  transform: scale(1.2);
+  box-shadow: 0 0 10px rgba(0, 92, 191, 0.5);
+}
+
+:deep(.swiper-button-prev),
+:deep(.swiper-button-next) {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+  background-color: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  color: #005cbf;
+  transition: all 0.3s ease;
+}
+:deep(.swiper-button-prev)::after,
+:deep(.swiper-button-next)::after {
+  font-size: 1.5rem;
+  font-weight: 900;
+}
+
+:deep(.swiper-button-prev):hover,
+:deep(.swiper-button-next):hover {
+  background-color: #005cbf;
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(0, 92, 191, 0.4);
+}
+
+:deep(.swiper-button-prev) {
+  left: 0;
+}
+:deep(.swiper-button-next) {
+  right: 0;
 }
 </style>

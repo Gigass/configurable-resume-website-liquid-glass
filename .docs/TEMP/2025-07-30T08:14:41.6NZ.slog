@@ -1,0 +1,41 @@
+---
+timestamp: '2025-07-30T08:14:41.6NZ'
+user_prompt: '我需要每一个adv-card  构建一个轮播展示，而不是现在平铺效果'
+---
+
+**[Goal]** 使用 Swiper.js 将优势卡片区域从平铺布局重构为轮播组件。
+**[Artifact]**
+
+```bash
+# 安装 Swiper 依赖
+npm install swiper --save
+```
+
+```javascript
+// 脚本改动：移除 IntersectionObserver，引入并配置 Swiper
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+```
+
+```html
+<!-- 模板改动：使用 <swiper> 和 <swiper-slide> 替换 .advantages-grid -->
+<swiper ...>
+  <swiper-slide v-for="(item, idx) in advantages" :key="idx">
+    <div class="adv-card ...">...</div>
+  </swiper-slide>
+</swiper>
+<div class="swiper-pagination"></div>
+<div class="swiper-button-prev"></div>
+<div class="swiper-button-next"></div>
+```
+
+```css
+/* 样式改动：为 Swiper 导航和分页器添加液态玻璃风格 */
+:deep(.swiper-pagination-bullet) { ... }
+:deep(.swiper-pagination-bullet-active) { ... }
+:deep(.swiper-button-prev),
+:deep(.swiper-button-next) { ... }
+```
