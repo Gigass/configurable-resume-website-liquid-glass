@@ -67,53 +67,22 @@ const slidesData = advantages.map((advantage, index) => {
   };
 });
 
+const expandedCard = ref<number | null>(null);
+
+const toggleCard = (index: number) => {
+  expandedCard.value = expandedCard.value === index ? null : index;
+};
+
+// 移除全屏相关逻辑
 const showCarousel = ref(false);
 let scrollTimeout: number | null = null;
-// const activeAdvantage = ref<number | null>(null); // No longer needed
 
-const showFullscreen = () => {
-  if (!showCarousel.value) {
-    showCarousel.value = true;
-  }
-};
-
-const hideFullscreen = () => {
-  if (showCarousel.value) {
-    showCarousel.value = false;
-  }
-};
-
-const handleWheel = (event: WheelEvent) => {
-  if (scrollTimeout !== null) return;
-
-  const setScrollTimeout = () => {
-    scrollTimeout = window.setTimeout(() => {
-      scrollTimeout = null;
-    }, 1500); // Animation duration + buffer
-  };
-
-  // On hero screen, scroll down to reveal content
-  if (!showCarousel.value && event.deltaY > 10) {
-    showFullscreen();
-    setScrollTimeout();
-  }
-  // On content screen, scroll up from the top to return to hero
-  else if (showCarousel.value && event.deltaY < -10) {
-    const contentEl = document.querySelector('.fullscreen-content');
-    // Only trigger if content is scrolled to the top
-    if (contentEl && contentEl.scrollTop === 0) {
-      hideFullscreen();
-      setScrollTimeout();
-    }
-  }
-};
-
+// 移除滚轮事件处理
 onMounted(() => {
-  window.addEventListener('wheel', handleWheel);
+  // 移除wheel事件监听
 });
 
 onUnmounted(() => {
-  window.removeEventListener('wheel', handleWheel);
   if (scrollTimeout) {
     clearTimeout(scrollTimeout);
   }
@@ -139,7 +108,7 @@ onUnmounted(() => {
       </filter>
     </svg>
 
-    <div class="hero-container liquidGlass-wrapper" :class="{ 'hidden': showCarousel }">
+    <div class="hero-container liquidGlass-wrapper">
       <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
       <div class="liquidGlass-tint"></div>
       <div class="liquidGlass-shine"></div>
@@ -152,41 +121,38 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <!-- Scroll Down Arrow -->
-    <div class="scroll-down-arrow" @click="showFullscreen" v-show="!showCarousel">
-      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 4V20M12 20L18 14M12 20L6 14" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
-
-
-    <!-- Fullscreen Content -->
-    <div class="fullscreen-content" :class="{ 'visible': showCarousel }">
+    <!-- 卡片式轮播图 -->
+    <div class="carousel-container">
       <swiper
         :modules="[Navigation, Autoplay, EffectFade]"
         :slides-per-view="1"
         :space-between="0"
         loop
         effect="fade"
-        :fade-effect="{
-          crossFade: true
-        }"
-        :autoplay="{
-          delay: 5000,
-          disableOnInteraction: false,
-        }"
+        :fade-effect="{ crossFade: true }"
+        :autoplay="{ delay: 5000, disableOnInteraction: false }"
         :navigation="true"
-        class="fullscreen-swiper"
+        class="card-swiper"
       >
         <swiper-slide v-for="(slide, index) in slidesData" :key="index">
-          <div class="slide-background" :style="{ backgroundImage: `url(${slide.image})` }"></div>
-          <div class="adv-card liquidGlass-wrapper visible">
-            <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
-            <div class="liquidGlass-tint"></div>
-            <div class="liquidGlass-shine"></div>
-            <div class="liquidGlass-text adv-content">
-              <span class="adv-icon" v-html="slide.icon"></span>
-              <span class="adv-text" v-html="slide.text"></span>
+          <div class="slide-card" :style="{ backgroundImage: `url(${slide.image})` }">
+            <div 
+              class="text-card liquidGlass-wrapper" 
+              :class="{ 'expanded': expandedCard === index }"
+              @click="toggleCard(index)"
+            >
+              <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
+              <div class="liquidGlass-tint"></div>
+              <div class="liquidGlass-shine"></div>
+              <div class="liquidGlass-text">
+                <div class="card-header">
+                  <span class="adv-icon" v-html="slide.icon"></span>
+                  <span class="expand-btn">{{ expandedCard === index ? '−' : '+' }}</span>
+                </div>
+                <div class="card-content" v-show="expandedCard === index">
+                  <span class="adv-text" v-html="slide.text"></span>
+                </div>
+              </div>
             </div>
           </div>
         </swiper-slide>
@@ -198,15 +164,14 @@ onUnmounted(() => {
 <style scoped>
 .home-view {
   display: flex;
-  flex-direction: column; /* 改为纵向排列 */
+  flex-direction: column;
   align-items: center;
-  justify-content: center; /* 垂直居中 hero-container */
-  gap: 3.5rem; /* 增加卡片间距 */
+  justify-content: center;
+  gap: 4rem;
   flex-grow: 1;
-  min-height: 100vh; /* 确保至少一屏高 */
-  padding-bottom: 5rem; /* 底部留出空间 */
-  overflow: hidden; /* 隐藏滚动条，手动控制内容切换 */
-  position: relative; /* 为绝对定位的子元素提供基准 */
+  min-height: 100vh;
+  padding: 2rem;
+  position: relative;
 }
 
 .hero-container {
@@ -214,139 +179,58 @@ onUnmounted(() => {
   max-width: 800px;
   border-radius: 2rem;
   font-size: 1.18rem;
-  margin-bottom: 0; /* 移除和下方内容的固定间距 */
+  margin-bottom: 0;
   transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
-  transition-delay: 0.5s; /* 延迟 hero 入场，避免动画冲突 */
   z-index: 10;
 }
 
-.hero-container.hidden {
-  opacity: 0;
-  transform: scale(0.9);
-  pointer-events: none;
-  transition-delay: 0s; /* hero 退场时无延迟 */
-}
-
-.scroll-down-arrow {
-  position: absolute;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  cursor: pointer;
-  z-index: 11;
-  opacity: 0.7;
-  transition: opacity 0.3s ease;
-}
-
-.scroll-down-arrow:hover {
-  opacity: 1;
-}
-
-.scroll-down-arrow svg {
-  animation: bounce 2s infinite;
-}
-
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(-20px);
-  }
-  60% {
-    transform: translateY(-10px);
-  }
-}
-
-
-.fullscreen-content {
-  position: absolute;
-  top: 0;
-  left: 0;
+.carousel-container {
   width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  /* The following properties are good for the hero, but not for the fullscreen container */
-  /* align-items: center; */
-  /* justify-content: center; */
-  padding: 0; /* Remove padding to allow true fullscreen */
-  overflow-y: auto;
-  box-sizing: border-box;
-  /* Hide scrollbar */
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
-
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(100px);
-  transition: opacity 1s cubic-bezier(0.68, -0.55, 0.265, 1.55), transform 1s cubic-bezier(0.68, -0.55, 0.265, 1.55), visibility 0s 1.2s;
-  z-index: 20;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.fullscreen-content::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, and Opera */
-}
-
-.fullscreen-content.visible {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-  transition-delay: 0s;
-}
-
-.fullscreen-swiper {
-  position: absolute;
-  top: 0;
-  left: 0;
+.card-swiper {
   width: 100%;
-  height: 100%;
-  --swiper-navigation-color: #fff; /* Ensure nav arrows are visible on dark backgrounds */
-  --swiper-navigation-size: 30px; /* Adjust arrow size */
+  aspect-ratio: 16/9;
+  border-radius: 2rem;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  --swiper-navigation-color: #fff;
+  --swiper-navigation-size: 30px;
 }
 
-.swiper-slide {
-  position: relative; /* For positioning the card inside */
-  overflow: hidden; /* To contain the card animation */
-}
-
-.slide-background {
+.slide-card {
   width: 100%;
   height: 100%;
   background-size: cover;
   background-position: center;
-  transition: transform 0.6s ease-out;
+  position: relative;
+  border-radius: 2rem;
+  overflow: hidden;
 }
 
-/* No longer need hover effect for background */
-/*
-.swiper-slide:hover .slide-background {
-  transform: scale(1.05);
-}
-*/
-
-.adv-card.liquidGlass-wrapper {
+.text-card.liquidGlass-wrapper {
   position: absolute;
+  right: 2rem;
   top: 50%;
-  right: 5%; /* Position on the right */
-  transform: translateY(-50%); /* Center vertically */
-  width: 90%;
-  max-width: 480px;
-  min-height: 280px;
-  /* Card is now visible by default, no transition on entry */
-  opacity: 1;
-  pointer-events: auto; /* Card is always interactive */
+  transform: translateY(-50%);
+  width: 50%;
+  min-height: 120px;
+  border-radius: 1.5rem;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
+  /* 恢复液态玻璃样式 */
+  display: flex;
+  font-weight: 600;
+  overflow: hidden;
+  color: black;
+  box-shadow: 0 6px 6px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
-/* Remove hover-based visibility logic */
-/*
-.swiper-slide:hover .adv-card.liquidGlass-wrapper {
-  opacity: 1;
-  transform: translateY(-50%) translateX(0);
-  pointer-events: auto;
-  transition-delay: 0.1s;
+.text-card.expanded {
+  min-height: 300px;
 }
-*/
 
 .liquidGlass-wrapper {
   position: relative;
@@ -389,7 +273,8 @@ onUnmounted(() => {
 .liquidGlass-text {
   z-index: 3;
   color: #1a1a1a;
-  padding: 4rem 4rem;
+  padding: 2rem;
+  width: 100%;
 }
 
 .hero-title {
@@ -410,118 +295,59 @@ onUnmounted(() => {
   font-size: 1.18rem;
   max-width: 600px;
   color: #333333;
-  margin: 1.5rem auto 0; /* 调整与副标题的间距 */
+  margin: 1.5rem auto 0;
 }
 
-.hero-intro {
-  font-size: 1.15rem;
-  color: #222;
-  font-weight: 700;
-  margin: 0 auto 2.2rem;
-  line-height: 1.9;
-  text-align: left;
-  background: rgba(255,255,255,0.12);
-  border-radius: 1.2rem;
-  padding: 1.2rem 1.5rem;
-  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.06);
-  max-width: 700px;
-}
-
-.hero-cta {
-  display: inline-block;
-  padding: 0.8rem 2rem;
-  border-radius: 8px;
-  background-color: var(--color-primary);
-  color: #ffffff;
-  font-size: 1.1rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  border: none;
-}
-
-.hero-cta:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 20px rgba(88, 166, 255, 0.3);
-  filter: brightness(1.1);
-}
-
-.liquidGlass-btn {
-  display: inline-block;
-  margin-top: 2.5rem;
-  padding: 0.9rem 2.8rem;
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: #fff;
-  background-color: #005cbf;
-  border-radius: 2rem;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0, 92, 191, 0.4);
-}
-.liquidGlass-btn:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 25px rgba(0, 92, 191, 0.5);
-  filter: brightness(1.15);
-}
-
-/* About Content Styles */
-.about-content {
+.card-header {
   display: flex;
-  flex-direction: column;
-  gap: 2.5rem;
+  justify-content: space-between;
   align-items: center;
-  width: 100%;
-  max-width: 900px;
-  /* 移除背景和边框，让卡片独立 */
-  position: relative; /* 为 Swiper 导航按钮定位 */
-}
-
-.advantages-glass {
-  width: 100%;
-  border-radius: 0;
-  background: none;
-  box-shadow: none;
-  padding: 0 4rem; /* 为导航按钮留出空间 */
-}
-
-.advantages-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-  gap: 1.5rem;
-  width: 100%;
-}
-
-.adv-card.liquidGlass-wrapper {
-  min-height: 280px; /* 调整卡片高度以适应内容 */
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 0;
-  width: 100%;
-}
-
-.adv-card.liquidGlass-wrapper.is-visible {
-  /* 动画结束状态 */
-  opacity: 1;
-  transform: translateY(0) scale(1);
-  filter: blur(0);
-}
-
-.adv-content {
-  display: flex;
-  align-items: flex-start;
-  gap: 1.1rem;
-  font-size: 1.08rem;
-  font-weight: 500;
-  line-height: 1.7;
-  padding: 2.5rem 3rem;
+  margin-bottom: 1rem;
 }
 
 .adv-icon {
-  font-size: 2.5rem; /* 增大图标 */
+  font-size: 2.5rem;
   flex-shrink: 0;
-  margin-top: 0.2rem;
+}
+
+.expand-btn {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #005cbf;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.expand-btn:hover {
+  background: rgba(0, 92, 191, 0.3);
+  transform: scale(1.1);
+}
+
+.card-content {
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.adv-text {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #1a1a1a;
 }
 
 .adv-text b {
@@ -534,120 +360,41 @@ onUnmounted(() => {
   text-fill-color: transparent;
 }
 
-.skills-section {
-  width: 100%;
-}
-
-.skills-section h3 {
-  font-size: 1.2rem;
-  color: #005cbf;
-  margin-bottom: 1rem;
-  font-weight: 700;
-  text-align: center; /* 居中标题 */
-}
-
-.skills-tags {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center; /* 居中标签 */
-  gap: 0.7rem;
-}
-
-.skill-tag {
-  display: inline-block;
-  background: rgba(255,255,255,0.18);
-  border: 1px solid rgba(255,255,255,0.25);
-  color: #005cbf;
-  font-weight: 700;
-  border-radius: 1.2rem;
-  padding: 0.4rem 1.2rem;
-  font-size: 1rem;
-  margin-bottom: 0.2rem;
-  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.06);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  transition: background 0.2s;
-}
-
-.skill-tag:hover {
-  background: #005cbf;
-  color: #fff;
-}
-
-.final-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2.5rem;
-  width: 100%;
-  max-width: 900px;
-  margin-top: 3rem;
-}
-
-/* Swiper-specific styles */
-.advantages-carousel {
-  width: 100%;
-  overflow: visible; /* 让卡片阴影不被裁剪 */
-}
-
-:deep(.swiper-pagination-bullet) {
-  width: 12px;
-  height: 12px;
-  background: rgba(255, 255, 255, 0.5);
-  border: 1px solid rgba(0, 92, 191, 0.4);
-  opacity: 0.8;
-  transition: all 0.3s ease;
-}
-
-:deep(.swiper-pagination-bullet-active) {
-  background: #005cbf;
-  transform: scale(1.2);
-  box-shadow: 0 0 10px rgba(0, 92, 191, 0.5);
-}
-
+/* 导航按钮样式 */
 :deep(.swiper-button-prev),
 :deep(.swiper-button-next) {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
   width: 50px;
   height: 50px;
   background-color: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  color: #005cbf;
+  color: #fff;
   transition: all 0.3s ease;
-  z-index: 30; /* 确保导航在顶层 */
-}
-:deep(.swiper-button-prev)::after,
-:deep(.swiper-button-next)::after {
-  font-size: 1.5rem;
-  font-weight: 900;
 }
 
 :deep(.swiper-button-prev):hover,
 :deep(.swiper-button-next):hover {
-  background-color: #005cbf;
-  color: #fff;
-  box-shadow: 0 6px 20px rgba(0, 92, 191, 0.4);
+  background-color: rgba(0, 92, 191, 0.8);
+  transform: scale(1.1);
 }
 
-:deep(.swiper-button-prev) {
-  left: 0;
-}
-:deep(.swiper-button-next) {
-  right: 0;
-}
-
-/* Responsive adjustments for smaller screens */
+/* 响应式设计 */
 @media (max-width: 768px) {
-  .liquidGlass-text {
-    padding: 2.5rem 2rem;
+  .carousel-container {
+    max-width: 95%;
   }
-
+  
+  .text-card {
+    width: 60%;
+    right: 1rem;
+  }
+  
+  .text-card.expanded {
+    min-height: 250px;
+  }
+  
   .hero-title {
     font-size: 3rem;
   }
@@ -655,45 +402,9 @@ onUnmounted(() => {
   .hero-subtitle {
     font-size: 1.3rem;
   }
-
-  .fullscreen-content {
-    padding: 0; /* Fullscreen should have no padding */
-  }
-
-  .adv-content {
-    padding: 2rem 1.5rem;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
   
-  .adv-card.liquidGlass-wrapper {
-    /* On mobile, card takes more width and is centered */
-    top: auto;
-    bottom: 2rem;
-    left: 50%;
-    right: auto;
-    width: 90%;
-    transform: translateX(-50%);
-  }
-
-  /* Remove hover-specific rule for mobile */
-  /*
-  .swiper-slide:hover .adv-card.liquidGlass-wrapper {
-    transform: translateX(-50%) translateY(0);
-  }
-  */
-
-  :deep(.swiper-button-prev),
-  :deep(.swiper-button-next) {
-    /* Keep nav buttons on mobile but make them smaller */
-    width: 40px;
-    height: 40px;
-  }
-
-  :deep(.swiper-button-prev)::after,
-  :deep(.swiper-button-next)::after {
-    font-size: 1.2rem;
+  .liquidGlass-text {
+    padding: 1.5rem;
   }
 }
 </style>
