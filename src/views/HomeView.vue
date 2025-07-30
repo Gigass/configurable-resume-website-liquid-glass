@@ -1,11 +1,23 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router';
-// 引入 Swiper
+import { ref, onMounted, onUnmounted } from 'vue';
+
+// 重新引入 Swiper
 import { Swiper, SwiperSlide } from 'swiper/vue';
-import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import { Navigation, Autoplay, EffectFade } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
-import 'swiper/css/pagination';
+import 'swiper/css/effect-fade';
+
+// 导入背景图片
+import lb1 from '@/assets/lb/lb1.png';
+import lb2 from '@/assets/lb/lb2.png';
+import lb3 from '@/assets/lb/lb3.png';
+import lb4 from '@/assets/lb/lb4.png';
+import lb5 from '@/assets/lb/lb5.png';
+import lb6 from '@/assets/lb/lb6.png';
+import lb7 from '@/assets/lb/lb7.png';
+import lb8 from '@/assets/lb/lb8.png';
 
 const advantages = [
   {
@@ -46,6 +58,66 @@ const skillTags = [
   'Java', 'Spring', 'Vue3', 'Golang', 'K8s', 'SaaS', '微服务', '数据库', 'AI', '企业微信', '全栈', '云原生', '自动化', '数据可视化', '移动端',
 ];
 
+// 将优势和图片数据结合
+const slidesData = advantages.map((advantage, index) => {
+  const images = [lb1, lb2, lb3, lb4, lb5, lb6, lb7, lb8];
+  return {
+    ...advantage,
+    image: images[index % images.length], // 循环使用图片
+  };
+});
+
+const showCarousel = ref(false);
+let scrollTimeout: number | null = null;
+// const activeAdvantage = ref<number | null>(null); // No longer needed
+
+const showFullscreen = () => {
+  if (!showCarousel.value) {
+    showCarousel.value = true;
+  }
+};
+
+const hideFullscreen = () => {
+  if (showCarousel.value) {
+    showCarousel.value = false;
+  }
+};
+
+const handleWheel = (event: WheelEvent) => {
+  if (scrollTimeout !== null) return;
+
+  const setScrollTimeout = () => {
+    scrollTimeout = window.setTimeout(() => {
+      scrollTimeout = null;
+    }, 1500); // Animation duration + buffer
+  };
+
+  // On hero screen, scroll down to reveal content
+  if (!showCarousel.value && event.deltaY > 10) {
+    showFullscreen();
+    setScrollTimeout();
+  }
+  // On content screen, scroll up from the top to return to hero
+  else if (showCarousel.value && event.deltaY < -10) {
+    const contentEl = document.querySelector('.fullscreen-content');
+    // Only trigger if content is scrolled to the top
+    if (contentEl && contentEl.scrollTop === 0) {
+      hideFullscreen();
+      setScrollTimeout();
+    }
+  }
+};
+
+onMounted(() => {
+  window.addEventListener('wheel', handleWheel);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('wheel', handleWheel);
+  if (scrollTimeout) {
+    clearTimeout(scrollTimeout);
+  }
+});
 </script>
 
 <template>
@@ -67,7 +139,7 @@ const skillTags = [
       </filter>
     </svg>
 
-    <div class="hero-container liquidGlass-wrapper">
+    <div class="hero-container liquidGlass-wrapper" :class="{ 'hidden': showCarousel }">
       <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
       <div class="liquidGlass-tint"></div>
       <div class="liquidGlass-shine"></div>
@@ -80,63 +152,45 @@ const skillTags = [
       </div>
     </div>
 
-    <!-- 从 AboutView 合并过来的内容 -->
-    <div class="about-content">
-      <!-- 优势区 -->
-      <div class="advantages-glass">
-        <swiper
-          :modules="[Navigation, Pagination, Autoplay]"
-          :slides-per-view="1"
-          :space-between="30"
-          loop
-          :autoplay="{
-            delay: 4000,
-            disableOnInteraction: false,
-          }"
-          :pagination="{
-            el: '.swiper-pagination',
-            clickable: true,
-          }"
-          :navigation="{
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-          }"
-          class="advantages-carousel"
-        >
-          <swiper-slide v-for="(item, idx) in advantages" :key="idx">
-            <div class="adv-card liquidGlass-wrapper">
-              <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
-              <div class="liquidGlass-tint"></div>
-              <div class="liquidGlass-shine"></div>
-              <div class="liquidGlass-text adv-content">
-                <span class="adv-icon" v-html="item.icon"></span>
-                <span class="adv-text" v-html="item.text"></span>
-              </div>
-            </div>
-          </swiper-slide>
-        </swiper>
-        <!-- Swiper 自定义导航 -->
-        <div class="swiper-pagination"></div>
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-button-next"></div>
-      </div>
+    <!-- Scroll Down Arrow -->
+    <div class="scroll-down-arrow" @click="showFullscreen" v-show="!showCarousel">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 4V20M12 20L18 14M12 20L6 14" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
     </div>
 
-    <!-- 结尾技能区和CTA -->
-    <div class="final-section">
-      <!-- 技能标签区 -->
-      <div class="skills-section liquidGlass-wrapper">
-        <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
-        <div class="liquidGlass-tint"></div>
-        <div class="liquidGlass-shine"></div>
-        <div class="liquidGlass-text">
-          <h3>核心技能</h3>
-          <div class="skills-tags">
-            <span class="skill-tag" v-for="tag in skillTags" :key="tag">{{ tag }}</span>
+
+    <!-- Fullscreen Content -->
+    <div class="fullscreen-content" :class="{ 'visible': showCarousel }">
+      <swiper
+        :modules="[Navigation, Autoplay, EffectFade]"
+        :slides-per-view="1"
+        :space-between="0"
+        loop
+        effect="fade"
+        :fade-effect="{
+          crossFade: true
+        }"
+        :autoplay="{
+          delay: 5000,
+          disableOnInteraction: false,
+        }"
+        :navigation="true"
+        class="fullscreen-swiper"
+      >
+        <swiper-slide v-for="(slide, index) in slidesData" :key="index">
+          <div class="slide-background" :style="{ backgroundImage: `url(${slide.image})` }"></div>
+          <div class="adv-card liquidGlass-wrapper visible">
+            <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
+            <div class="liquidGlass-tint"></div>
+            <div class="liquidGlass-shine"></div>
+            <div class="liquidGlass-text adv-content">
+              <span class="adv-icon" v-html="slide.icon"></span>
+              <span class="adv-text" v-html="slide.text"></span>
+            </div>
           </div>
-        </div>
-      </div>
-      <RouterLink to="/portfolio" class="liquidGlass-btn">查看我的作品</RouterLink>
+        </swiper-slide>
+      </swiper>
     </div>
   </main>
 </template>
@@ -146,11 +200,13 @@ const skillTags = [
   display: flex;
   flex-direction: column; /* 改为纵向排列 */
   align-items: center;
-  justify-content: flex-start; /* 从顶部开始 */
+  justify-content: center; /* 垂直居中 hero-container */
   gap: 3.5rem; /* 增加卡片间距 */
   flex-grow: 1;
   min-height: 100vh; /* 确保至少一屏高 */
   padding-bottom: 5rem; /* 底部留出空间 */
+  overflow: hidden; /* 隐藏滚动条，手动控制内容切换 */
+  position: relative; /* 为绝对定位的子元素提供基准 */
 }
 
 .hero-container {
@@ -159,7 +215,138 @@ const skillTags = [
   border-radius: 2rem;
   font-size: 1.18rem;
   margin-bottom: 0; /* 移除和下方内容的固定间距 */
+  transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+  transition-delay: 0.5s; /* 延迟 hero 入场，避免动画冲突 */
+  z-index: 10;
 }
+
+.hero-container.hidden {
+  opacity: 0;
+  transform: scale(0.9);
+  pointer-events: none;
+  transition-delay: 0s; /* hero 退场时无延迟 */
+}
+
+.scroll-down-arrow {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: pointer;
+  z-index: 11;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.scroll-down-arrow:hover {
+  opacity: 1;
+}
+
+.scroll-down-arrow svg {
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-20px);
+  }
+  60% {
+    transform: translateY(-10px);
+  }
+}
+
+
+.fullscreen-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  /* The following properties are good for the hero, but not for the fullscreen container */
+  /* align-items: center; */
+  /* justify-content: center; */
+  padding: 0; /* Remove padding to allow true fullscreen */
+  overflow-y: auto;
+  box-sizing: border-box;
+  /* Hide scrollbar */
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(100px);
+  transition: opacity 1s cubic-bezier(0.68, -0.55, 0.265, 1.55), transform 1s cubic-bezier(0.68, -0.55, 0.265, 1.55), visibility 0s 1.2s;
+  z-index: 20;
+}
+
+.fullscreen-content::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, and Opera */
+}
+
+.fullscreen-content.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition-delay: 0s;
+}
+
+.fullscreen-swiper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  --swiper-navigation-color: #fff; /* Ensure nav arrows are visible on dark backgrounds */
+  --swiper-navigation-size: 30px; /* Adjust arrow size */
+}
+
+.swiper-slide {
+  position: relative; /* For positioning the card inside */
+  overflow: hidden; /* To contain the card animation */
+}
+
+.slide-background {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.6s ease-out;
+}
+
+/* No longer need hover effect for background */
+/*
+.swiper-slide:hover .slide-background {
+  transform: scale(1.05);
+}
+*/
+
+.adv-card.liquidGlass-wrapper {
+  position: absolute;
+  top: 50%;
+  right: 5%; /* Position on the right */
+  transform: translateY(-50%); /* Center vertically */
+  width: 90%;
+  max-width: 480px;
+  min-height: 280px;
+  /* Card is now visible by default, no transition on entry */
+  opacity: 1;
+  pointer-events: auto; /* Card is always interactive */
+}
+
+/* Remove hover-based visibility logic */
+/*
+.swiper-slide:hover .adv-card.liquidGlass-wrapper {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+  pointer-events: auto;
+  transition-delay: 0.1s;
+}
+*/
 
 .liquidGlass-wrapper {
   position: relative;
@@ -433,6 +620,7 @@ const skillTags = [
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   color: #005cbf;
   transition: all 0.3s ease;
+  z-index: 30; /* 确保导航在顶层 */
 }
 :deep(.swiper-button-prev)::after,
 :deep(.swiper-button-next)::after {
@@ -452,5 +640,60 @@ const skillTags = [
 }
 :deep(.swiper-button-next) {
   right: 0;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .liquidGlass-text {
+    padding: 2.5rem 2rem;
+  }
+
+  .hero-title {
+    font-size: 3rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.3rem;
+  }
+
+  .fullscreen-content {
+    padding: 0; /* Fullscreen should have no padding */
+  }
+
+  .adv-content {
+    padding: 2rem 1.5rem;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .adv-card.liquidGlass-wrapper {
+    /* On mobile, card takes more width and is centered */
+    top: auto;
+    bottom: 2rem;
+    left: 50%;
+    right: auto;
+    width: 90%;
+    transform: translateX(-50%);
+  }
+
+  /* Remove hover-specific rule for mobile */
+  /*
+  .swiper-slide:hover .adv-card.liquidGlass-wrapper {
+    transform: translateX(-50%) translateY(0);
+  }
+  */
+
+  :deep(.swiper-button-prev),
+  :deep(.swiper-button-next) {
+    /* Keep nav buttons on mobile but make them smaller */
+    width: 40px;
+    height: 40px;
+  }
+
+  :deep(.swiper-button-prev)::after,
+  :deep(.swiper-button-next)::after {
+    font-size: 1.2rem;
+  }
 }
 </style>
