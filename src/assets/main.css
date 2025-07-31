@@ -26,15 +26,21 @@ body {
   color: var(--color-text);
   background: var(--color-background);
   background-image: url('/src/assets/bac.png');
-  background-size: 500px;
-  background-position: center;
+  /* 
+    'cover'是确保背景无白边的关键。
+    它会缩放图片，使其完全覆盖屏幕，即使裁剪掉部分图片也绝不留白。
+  */
+  background-size: cover;
+  background-position: center; /* 默认居中 */
+  background-repeat: no-repeat;
   line-height: 1.6;
   font-family: var(--font-family-base);
   font-size: 16px;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  animation: moveBackground 120s linear infinite !important;
+  /* 应用平移动画，时长80秒，线性，无限往复 */
+  animation: pan-wallpaper 80s linear infinite alternate;
 }
 
 body::before {
@@ -65,12 +71,13 @@ a:hover {
   filter: brightness(1.2);
 }
 
-@keyframes moveBackground {
+/* 清理并重命名动画，以实现平移效果 */
+@keyframes pan-wallpaper {
   from {
-    background-position: 0% 0%;
+    background-position-x: 0%;
   }
   to {
-    background-position: 0% -1500%;
+    background-position-x: 100%;
   }
 }
 

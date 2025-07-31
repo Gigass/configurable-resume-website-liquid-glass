@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router';
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
 
 // 重新引入 Swiper
 import { Swiper, SwiperSlide } from 'swiper/vue';
@@ -21,37 +21,78 @@ import lb8 from '@/assets/lb/lb8.png';
 
 const advantages = [
   {
-    icon: '👨‍💻',
-    text: '<b>多次从零搭建核心技术平台与团队</b>，具备独立完成技术选型、架构设计和项目全流程管理的能力，高效推动项目上线和团队成长，助力企业实现数字化升级。',
+    "icon": "👨‍💻",
+    "title": "技术平台全周期主导与团队赋能",
+    "summary": "具备技术选型、架构设计到项目落地的全栈能力，擅长全流程管理与团队建设。",
+    "details": [
+      "主导核心平台从0到1的构建，实现架构落地与稳定迭代。",
+      "搭建技术团队，推动知识传承与高效协同。",
+      "为企业数字化转型提供持续技术支撑。"
+    ]
   },
   {
-    icon: '🏭',
-    text: '深耕<b>制造业信息化与数字化转型</b>，主导SaaS平台、CRM、实验室管理等核心系统的规划与开发，擅长将复杂业务流程自动化、数据化、平台化，为企业持续转型赋能。',
+    "icon": "🏭",
+    "title": "制造业数字化转型深耕",
+    "summary": "拥有大型制造企业SaaS、CRM、LIMS等系统研发与落地主导经验。",
+    "details": [
+      "精通业务流程重构、自动化与数据驱动平台架构设计。",
+      "为企业定制端到端创新解决方案，提升核心竞争力。"
+    ]
   },
   {
-    icon: '💬',
-    text: '精通<b>企业微信管理与开发</b>，长期担任企业微信超级管理员，负责企业微信与OA、CRM、ERP等系统的深度集成开发，有效推动企业移动办公、消息协同和流程自动化落地。',
+    "icon": "💬",
+    "title": "企业微信生态集成与开发",
+    "summary": "主导企业微信与OA、CRM系统高效集成，提升企业移动协作能力。",
+    "details": [
+      "全程负责企微生态系统集成与自动化流程开发。",
+      "打造高效业务场景下的移动化解决方案。"
+    ]
   },
   {
-    icon: '🧩',
-    text: '<b>技术栈全面</b>，精通Java及Spring全家桶、主流微服务架构，熟悉Golang，有丰富的高性能服务开发和系统优化经验；同时精于多种数据库、缓存、分布式任务和消息中间件，能灵活应对各类业务场景。',
+    "icon": "🧩",
+    "title": "全栈视野与微服务架构落地",
+    "summary": "精通Java/Spring体系、Golang高并发，具备分布式系统设计能力。",
+    "details": [
+      "熟练数据库、缓存、消息队列等底层技术。",
+      "主导高可用与高性能的企业级平台架构演进。"
+    ]
   },
   {
-    icon: '☁️',
-    text: '熟练掌握<b>云原生技术与架构设计</b>，参与平台容器化改造、K8s日常运维、多租户和高可用SaaS架构设计，支持平台全球化部署及高效运维管理。',
+    "icon": "☁️",
+    "title": "云原生与DevOps实战",
+    "summary": "主导平台容器化、Kubernetes运维与多租户SaaS部署。",
+    "details": [
+      "推动CI/CD流水线建设与自动化运维。",
+      "具备全球化与高可用架构部署的丰富实践。"
+    ]
   },
   {
-    icon: '📱',
-    text: '拥有<b>全栈开发能力</b>，熟悉JavaScript、移动端开发及微信小程序，擅长前后端分离项目推进和多端系统集成，提升业务协同效率和用户体验。',
+    "icon": "📱",
+    "title": "全栈开发与多端系统交付",
+    "summary": "覆盖前端Vue、小程序至后端服务，实现端到端敏捷开发。",
+    "details": [
+      "擅长前后端分离与系统集成，多端协同交付。",
+      "优化用户体验与提升业务响应效率。"
+    ]
   },
   {
-    icon: '🤖',
-    text: '拥有<b>AI与智能化平台研发经验</b>，参与智能机器人、AI数据平台等项目，推动AI技术与业务系统深度融合，助力企业智能决策和流程自动化。',
+    "icon": "🤖",
+    "title": "AI工程化与智能平台研发",
+    "summary": "参与AI数据平台、智能机器人项目，推动AI与业务深度融合。",
+    "details": [
+      "将机器学习与自动化技术应用于实际业务流程。",
+      "实现数据驱动的智能决策与业务效率提升。"
+    ]
   },
   {
-    icon: '🚀',
-    text: '<b>学习能力强</b>，热爱新技术研究，善于快速掌握前沿工具并应用于实际项目中，能够高效分析和解决疑难问题，持续推动技术创新和项目优化。',
-  },
+    "icon": "🚀",
+    "title": "持续技术创新与系统化能力",
+    "summary": "保持技术热情与敏锐洞察，善于将创新转化为业务价值。",
+    "details": [
+      "系统分析与解决复杂问题，推动技术架构演进。",
+      "不断优化项目实践与组织技术能力。"
+    ]
+  }
 ];
 
 const skillTags = [
@@ -59,22 +100,52 @@ const skillTags = [
 ];
 
 // 将优势和图片数据结合
-const slidesData = advantages.map((advantage, index) => {
+const slidesData = computed(() => advantages.map((advantage, index) => {
   const images = [lb1, lb2, lb3, lb4, lb5, lb6, lb7, lb8];
   return {
     ...advantage,
     image: images[index % images.length], // 循环使用图片
   };
-});
+}));
 
 const expandedCard = ref<number | null>(null);
+const swiperRef = ref<any>(null);
+const introductionStarted = ref(false);
 
-const toggleCard = (index: number) => {
-  expandedCard.value = expandedCard.value === index ? null : index;
+// 移除 toggleCard 相关逻辑
+const onSwiper = (swiper: any) => {
+  swiperRef.value = swiper;
+  swiper.autoplay.stop(); // 初始时停止自动播放
+};
+const onSlideChange = (swiper: any) => {
+  if (introductionStarted.value) {
+    expandedCard.value = swiper.realIndex;
+  }
+};
+
+const startIntroduction = () => {
+  introductionStarted.value = true;
+  if (swiperRef.value) {
+    swiperRef.value.autoplay.start();
+    // 立即展开第一个卡片
+    setTimeout(() => {
+      if(swiperRef.value) {
+         expandedCard.value = swiperRef.value.realIndex;
+      }
+    }, 100); 
+  }
+};
+
+const resetIntroduction = () => {
+  introductionStarted.value = false;
+  expandedCard.value = null; // 隐藏所有卡片
+  if (swiperRef.value) {
+    swiperRef.value.autoplay.stop();
+    swiperRef.value.slideToLoop(0, 0); // 回到第一个slide，无动画
+  }
 };
 
 // 移除全屏相关逻辑
-const showCarousel = ref(false);
 let scrollTimeout: number | null = null;
 
 // 移除滚轮事件处理
@@ -108,55 +179,71 @@ onUnmounted(() => {
       </filter>
     </svg>
 
-    <div class="hero-container liquidGlass-wrapper">
-      <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
-      <div class="liquidGlass-tint"></div>
-      <div class="liquidGlass-shine"></div>
-      <div class="liquidGlass-text">
-        <h1 class="hero-title">Chris Yang</h1>
-        <p class="hero-subtitle">资深Java工程师 | 技术平台构建者</p>
-        <p class="hero-description">
-          致力于将复杂的业务流程自动化、数据化、平台化，为企业数字化转型持续赋能。
-        </p>
-      </div>
-    </div>
+    <div class="main-content-area">
+      <transition name="hero-fade">
+        <div v-if="!introductionStarted" class="hero-overlay">
+          <div class="hero-container liquidGlass-wrapper">
+            <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
+            <div class="liquidGlass-tint"></div>
+            <div class="liquidGlass-shine"></div>
+            <div class="liquidGlass-text">
+              <h1 class="hero-title">Chris Yang</h1>
+              <p class="hero-subtitle">资深Java工程师 | 技术平台构建者</p>
+              <p class="hero-description">
+                具备多年企业级平台研发和数字化转型经验，主导从0到1的技术架构设计与核心系统落地，精通制造业SaaS、CRM、LIMS等业务场景。熟悉全栈开发、云原生架构和DevOps，拥有企业微信生态集成及AI智能平台项目实践。善于团队建设与协作，能将前沿技术高效转化为实际业务价值，持续推动企业创新和效率提升。
+              </p>
+            </div>
+          </div>
+          <button @click="startIntroduction" class="intro-btn">View Introduction</button>
+        </div>
+      </transition>
 
-    <!-- 卡片式轮播图 -->
-    <div class="carousel-container">
-      <swiper
-        :modules="[Navigation, Autoplay, EffectFade]"
-        :slides-per-view="1"
-        :space-between="0"
-        loop
-        effect="fade"
-        :fade-effect="{ crossFade: true }"
-        :autoplay="{ delay: 5000, disableOnInteraction: false }"
-        :navigation="true"
-        class="card-swiper"
-      >
-        <swiper-slide v-for="(slide, index) in slidesData" :key="index">
-          <div class="slide-card" :style="{ backgroundImage: `url(${slide.image})` }">
-            <div 
-              class="text-card liquidGlass-wrapper" 
-              :class="{ 'expanded': expandedCard === index }"
-              @click="toggleCard(index)"
-            >
-              <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
-              <div class="liquidGlass-tint"></div>
-              <div class="liquidGlass-shine"></div>
-              <div class="liquidGlass-text">
-                <div class="card-header">
-                  <span class="adv-icon" v-html="slide.icon"></span>
-                  <span class="expand-btn">{{ expandedCard === index ? '−' : '+' }}</span>
-                </div>
-                <div class="card-content" v-show="expandedCard === index">
-                  <span class="adv-text" v-html="slide.text"></span>
+      <!-- 返回按钮 -->
+      <transition name="fade">
+        <button v-if="introductionStarted" @click="resetIntroduction" class="reset-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2c5.52 0 10 4.48 10 10s-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2zm0 18c4.41 0 8-3.59 8-8s-3.59-8-8-8-8 3.59-8 8 3.59 8 8 8zm4.59-12.41L12 10.17l-4.59-4.58L6 7.17l4.59 4.59L6 16.34l1.41 1.41L12 13.59l4.59 4.58L17.91 18l-4.59-4.59 4.59-4.59-1.32-1.4z"/>
+          </svg>
+        </button>
+      </transition>
+
+      <!-- 卡片式轮播图 -->
+      <div class="carousel-container" :class="{ 'is-active': introductionStarted }">
+        <swiper
+          :modules="[Navigation, Autoplay, EffectFade]"
+          :slides-per-view="1"
+          :space-between="0"
+          loop
+          effect="fade"
+          :fade-effect="{ crossFade: true }"
+          :autoplay="{ delay: 5000, disableOnInteraction: false }"
+          :navigation="true"
+          class="card-swiper"
+          @swiper="onSwiper"
+          @slideChange="onSlideChange"
+        >
+          <swiper-slide v-for="(slide, index) in slidesData" :key="index">
+            <div class="slide-card" :style="{ backgroundImage: `url(${slide.image})` }">
+              <div 
+                class="text-card liquidGlass-wrapper" 
+                :class="{ 'expanded': expandedCard === index }"
+                >
+                <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
+                <div class="liquidGlass-tint"></div>
+                <div class="liquidGlass-shine"></div>
+                <div class="liquidGlass-text adv-typography">
+                  <div class="adv-title">{{ slide.title }}</div>
+                  <div class="adv-divider"></div>
+                  <p class="adv-summary">{{ slide.summary }}</p>
+                  <ul class="adv-details">
+                    <li v-for="(detail, i) in slide.details" :key="i">{{ detail }}</li>
+                  </ul>
                 </div>
               </div>
             </div>
-          </div>
-        </swiper-slide>
-      </swiper>
+          </swiper-slide>
+        </swiper>
+      </div>
     </div>
   </main>
 </template>
@@ -167,11 +254,105 @@ onUnmounted(() => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4rem;
   flex-grow: 1;
   min-height: 100vh;
-  padding: 2rem;
+  padding: 1rem;
   position: relative;
+}
+
+.main-content-area {
+  position: relative;
+  width: 90vw;
+  max-width: 1500px; /* 进一步放大 */
+  aspect-ratio: 16/9;
+  max-height: 90vh;
+}
+
+.reset-btn {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 30; /* 确保在最上层 */
+  width: 44px;
+  height: 44px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.reset-btn:hover {
+  background-color: rgba(0, 0, 0, 0.4);
+  transform: scale(1.1);
+}
+
+.reset-btn svg {
+  width: 24px;
+  height: 24px;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem;
+  /* 添加一个微妙的背景渐变，增加层次感 */
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 70%);
+}
+
+.hero-fade-leave-active {
+  transition: all 0.8s cubic-bezier(0.6, -0.28, 0.735, 0.045); /* easeInBack for a nice 'swoosh' */
+  transition-property: opacity, transform;
+}
+
+.hero-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+
+.intro-btn {
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #fff;
+  padding: 0.8rem 2.5rem;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.intro-btn:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
 }
 
 .hero-container {
@@ -179,15 +360,13 @@ onUnmounted(() => {
   max-width: 800px;
   border-radius: 2rem;
   font-size: 1.18rem;
-  margin-bottom: 0;
   transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
   z-index: 10;
 }
 
 .carousel-container {
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
+  height: 100%;
 }
 
 .card-swiper {
@@ -212,24 +391,156 @@ onUnmounted(() => {
 
 .text-card.liquidGlass-wrapper {
   position: absolute;
-  right: 2rem;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 50%;
-  min-height: 120px;
-  border-radius: 1.5rem;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0 auto;
+  width: 100%;
+  /* 移除高度动画，直接设定最终的自适应高度 */
+  height: auto;
+  min-height: 33%;
+  max-height: 45%;
+  border-radius: 0 0 2rem 2rem;
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
-  /* 恢复液态玻璃样式 */
+  /* 只对 transform 和 opacity 进行过渡 */
+  transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1), opacity 0.5s ease;
   display: flex;
   font-weight: 600;
   overflow: hidden;
-  color: black;
-  box-shadow: 0 6px 6px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.1);
+  color: #222;
+  box-shadow: 0 6px 24px 0 rgba(30,40,60,0.10), 0 0 20px rgba(0,0,0,0.08);
+  z-index: 10;
+  /* 初始状态：在父容器下方100%处，完全隐藏 */
+  transform: translateY(100%);
+  opacity: 0;
+  pointer-events: none;
+}
+.text-card.expanded {
+  /* 最终状态：回到原位，完全不透明 */
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+.liquidGlass-text.adv-typography {
+  z-index: 3;
+  padding: 2rem 2.5rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  animation: advFadeIn 0.7s cubic-bezier(0.4,0.2,0.2,1);
+  overflow-y: auto; /* 内容溢出时可滚动 */
+}
+.adv-title {
+  font-family: 'Avenir Next', 'Helvetica Neue', Arial, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  margin-bottom: 0.8rem;
+  /* 恢复为深色高级感渐变文字 */
+  color: #2a3a4d;
+  background: linear-gradient(90deg,#6a8bbd 0%,#3b5998 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+  transition: all 0.3s;
+  text-shadow: none; /* 移除阴影 */
+}
+.adv-divider {
+  width: 48px;
+  height: 3px;
+  border-radius: 2px;
+  /* 恢复为深色协调的渐变 */
+  background: linear-gradient(90deg,#b0c4de 0%,#6a8bbd 100%);
+  margin-bottom: 1rem;
+  opacity: 0.7;
+}
+.adv-summary {
+  font-size: 1.1rem;
+  font-weight: 500;
+  /* 恢复为深灰色 */
+  color: #3a4a5d;
+  line-height: 1.7;
+  margin-bottom: 1.2rem;
+  opacity: 0.95;
+  transition: all 0.3s;
+  text-shadow: none; /* 移除阴影 */
+}
+.adv-details {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 400;
+  /* 恢复为较浅的深灰色 */
+  color: #4a5a6d;
+  line-height: 1.8;
+  width: 100%;
+  text-shadow: none; /* 移除阴影 */
+}
+.adv-details li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.6rem;
+}
+.adv-details li::before {
+  content: '▪';
+  position: absolute;
+  left: 0;
+  top: 2px;
+  /* 恢复为深色协调的强调色 */
+  color: #6a8bbd;
+  font-size: 1.2rem;
+  line-height: 1;
 }
 
-.text-card.expanded {
-  min-height: 300px;
+.text-card.expanded .adv-title,
+.text-card.expanded .adv-summary,
+.text-card.expanded .adv-details {
+  animation: advTextFadeIn 0.7s cubic-bezier(0.4,0.2,0.2,1);
+}
+.text-card.expanded:hover .adv-title {
+  /* 悬停时增强渐变效果，或保持不变 */
+  filter: brightness(1.1);
+  text-shadow: none;
+}
+.text-card.expanded:hover .adv-summary {
+  color: #2a3a4d;
+}
+@keyframes advFadeIn {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes advTextFadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (max-width: 768px) {
+  .liquidGlass-text.adv-typography {
+    padding: 1.2rem 1rem 1rem 1rem;
+  }
+  .adv-title {
+    font-size: 1.3rem;
+  }
+  .adv-divider {
+    width: 28px;
+    height: 2px;
+    margin-bottom: 0.7rem;
+  }
+  .adv-summary {
+    font-size: 0.95rem;
+  }
+  .adv-details {
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+  .adv-details li {
+    padding-left: 1.2rem;
+    margin-bottom: 0.4rem;
+  }
 }
 
 .liquidGlass-wrapper {
@@ -300,7 +611,7 @@ onUnmounted(() => {
 
 .card-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   margin-bottom: 1rem;
 }
