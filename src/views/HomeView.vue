@@ -321,16 +321,19 @@ onUnmounted(() => {
   padding: 2rem;
   /* 添加一个微妙的背景渐变，增加层次感 */
   background: radial-gradient(ellipse at center, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 70%);
+  /* 初始状态：完全可见 */
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 0.8s cubic-bezier(0.6, -0.28, 0.735, 0.045);
 }
 
-.hero-fade-leave-active {
-  transition: all 0.8s cubic-bezier(0.6, -0.28, 0.735, 0.045); /* easeInBack for a nice 'swoosh' */
-  transition-property: opacity, transform;
+/* 进入动画（当元素从v-if="false"变为true时） */
+.hero-fade-enter-from {
+  clip-path: inset(0 0 100% 0); /* 从底部关闭状态开始 */
 }
 
+/* 离开动画（当元素从v-if="true"变为false时） */
 .hero-fade-leave-to {
-  opacity: 0;
-  transform: translateY(-100%);
+  clip-path: inset(100% 0 0 0); /* 从顶部开始关闭 */
 }
 
 .intro-btn {
@@ -396,29 +399,26 @@ onUnmounted(() => {
   bottom: 0;
   margin: 0 auto;
   width: 100%;
-  /* 移除高度动画，直接设定最终的自适应高度 */
   height: auto;
   min-height: 33%;
   max-height: 45%;
   border-radius: 0 0 2rem 2rem;
   cursor: pointer;
-  /* 只对 transform 和 opacity 进行过渡 */
-  transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1), opacity 0.5s ease;
+  /* 动画策略变更为裁剪路径(clip-path)，强制实时渲染模糊效果 */
+  transition: clip-path 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
   display: flex;
   font-weight: 600;
   overflow: hidden;
   color: #222;
   box-shadow: 0 6px 24px 0 rgba(30,40,60,0.10), 0 0 20px rgba(0,0,0,0.08);
   z-index: 10;
-  /* 初始状态：在父容器下方100%处，完全隐藏 */
-  transform: translateY(100%);
-  opacity: 0;
+  /* 初始状态：卡片在原位，但被完全裁剪，不可见 */
+  clip-path: inset(100% 0 0 0);
   pointer-events: none;
 }
 .text-card.expanded {
-  /* 最终状态：回到原位，完全不透明 */
-  transform: translateY(0);
-  opacity: 1;
+  /* 最终状态：裁剪区域完全打开，卡片完整可见 */
+  clip-path: inset(0% 0 0 0);
   pointer-events: auto;
 }
 .liquidGlass-text.adv-typography {
