@@ -109,6 +109,7 @@ const slidesData = computed(() => advantages.map((advantage, index) => {
 }));
 
 const expandedCard = ref<number | null>(null);
+const activeIndex = ref(0);
 const swiperRef = ref<any>(null);
 const introductionStarted = ref(false);
 
@@ -118,10 +119,18 @@ const onSwiper = (swiper: any) => {
   swiper.autoplay.stop(); // 初始时停止自动播放
 };
 const onSlideChange = (swiper: any) => {
+  activeIndex.value = swiper.realIndex;
   if (introductionStarted.value) {
     expandedCard.value = swiper.realIndex;
   }
 };
+
+const currentSlideData = computed(() => {
+  if (slidesData.value.length > 0) {
+    return slidesData.value[activeIndex.value];
+  }
+  return null;
+});
 
 const startIntroduction = () => {
   introductionStarted.value = true;
@@ -199,7 +208,7 @@ onUnmounted(() => {
       </transition>
 
       <!-- 返回按钮 -->
-      <transition name="fade">
+      <transition name="fade" enter-active-class="fade-enter-active reset-btn-transition" leave-active-class="fade-leave-active reset-btn-transition" enter-from-class="fade-enter-from reset-btn-transition" leave-to-class="fade-leave-to reset-btn-transition">
         <button v-if="introductionStarted" @click="resetIntroduction" class="reset-btn">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 2c5.52 0 10 4.48 10 10s-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2zm0 18c4.41 0 8-3.59 8-8s-3.59-8-8-8-8 3.59-8 8 3.59 8 8 8zm4.59-12.41L12 10.17l-4.59-4.58L6 7.17l4.59 4.59L6 16.34l1.41 1.41L12 13.59l4.59 4.58L17.91 18l-4.59-4.59 4.59-4.59-1.32-1.4z"/>
@@ -224,25 +233,29 @@ onUnmounted(() => {
         >
           <swiper-slide v-for="(slide, index) in slidesData" :key="index">
             <div class="slide-card" :style="{ backgroundImage: `url(${slide.image})` }">
-              <div 
-                class="text-card liquidGlass-wrapper" 
-                :class="{ 'expanded': expandedCard === index }"
-                >
-                <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
-                <div class="liquidGlass-tint"></div>
-                <div class="liquidGlass-shine"></div>
-                <div class="liquidGlass-text adv-typography">
-                  <div class="adv-title">{{ slide.title }}</div>
-                  <div class="adv-divider"></div>
-                  <p class="adv-summary">{{ slide.summary }}</p>
-                  <ul class="adv-details">
-                    <li v-for="(detail, i) in slide.details" :key="i">{{ detail }}</li>
-                  </ul>
-                </div>
-              </div>
+              <!-- text-card is now outside -->
             </div>
           </swiper-slide>
         </swiper>
+
+        <!-- Advantage card is now a sibling to the swiper -->
+        <div 
+          v-if="currentSlideData"
+          class="text-card liquidGlass-wrapper" 
+          :class="{ 'expanded': introductionStarted }"
+          >
+          <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
+          <div class="liquidGlass-tint"></div>
+          <div class="liquidGlass-shine"></div>
+          <div class="liquidGlass-text adv-typography">
+            <div class="adv-title">{{ currentSlideData.title }}</div>
+            <div class="adv-divider"></div>
+            <p class="adv-summary">{{ currentSlideData.summary }}</p>
+            <ul class="adv-details">
+              <li v-for="(detail, i) in currentSlideData.details" :key="i">{{ detail }}</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </main>
@@ -286,6 +299,7 @@ onUnmounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 }
 
 .reset-btn:hover {
@@ -326,6 +340,22 @@ onUnmounted(() => {
   transition: clip-path 0.8s cubic-bezier(0.6, -0.28, 0.735, 0.045);
 }
 
+/* 1. Hero Text Entrance Animation */
+.hero-container .hero-title,
+.hero-container .hero-subtitle,
+.hero-container .hero-description {
+  animation: fadeInUp 0.8s 0.2s both cubic-bezier(0.25, 1, 0.5, 1);
+}
+.hero-container .hero-subtitle { animation-delay: 0.4s; }
+.hero-container .hero-description { animation-delay: 0.6s; }
+
+
+.hero-fade-enter-from .hero-title,
+.hero-fade-enter-from .hero-subtitle,
+.hero-fade-enter-from .hero-description {
+  animation: none; /* Disable entrance animation when returning */
+}
+
 /* 进入动画（当元素从v-if="false"变为true时） */
 .hero-fade-enter-from {
   clip-path: inset(0 0 100% 0); /* 从底部关闭状态开始 */
@@ -350,6 +380,24 @@ onUnmounted(() => {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   text-transform: uppercase;
   letter-spacing: 0.1em;
+  position: relative;
+  overflow: hidden;
+  /* 2. Intro Button Breathing Effect */
+  animation: pulse 2.5s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+/* 3. Button Shine Effect */
+.intro-btn::after, .reset-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.6s ease;
+}
+.intro-btn:hover::after, .reset-btn:hover::after {
+  left: 150%;
 }
 
 .intro-btn:hover {
@@ -370,11 +418,17 @@ onUnmounted(() => {
 .carousel-container {
   width: 100%;
   height: 100%;
+  position: relative; /* Ensure it's a positioning context for the text-card */
 }
 
 .card-swiper {
   width: 100%;
-  aspect-ratio: 16/9;
+  /* 
+    The container `.main-content-area` already defines the aspect ratio.
+    The swiper should just fill its parent container.
+    Removing redundant aspect-ratio and setting height to 100% fixes the mismatch.
+  */
+  height: 100%;
   border-radius: 2rem;
   overflow: hidden;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
@@ -392,7 +446,18 @@ onUnmounted(() => {
   overflow: hidden;
 }
 
+/* 4. Ken Burns Effect for Active Slide */
+:deep(.swiper-slide-active) .slide-card {
+  animation: kenBurns 10s ease-in-out infinite alternate; /* Speed up from 15s to 10s */
+}
+
+/* 5. Pulsing Swiper Navigation Arrows */
+:deep(.swiper-button-prev), :deep(.swiper-button-next) {
+    animation: pulse 2.5s 1s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
 .text-card.liquidGlass-wrapper {
+  /* Re-add absolute positioning to overlay it on the swiper */
   position: absolute;
   left: 0;
   right: 0;
@@ -405,7 +470,8 @@ onUnmounted(() => {
   border-radius: 0 0 2rem 2rem;
   cursor: pointer;
   /* 动画策略变更为裁剪路径(clip-path)，强制实时渲染模糊效果 */
-  transition: clip-path 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+  transition: clip-path 0.7s cubic-bezier(0.4, 0.2, 0.2, 1), transform 0.4s ease;
+  transform-style: preserve-3d;
   display: flex;
   font-weight: 600;
   overflow: hidden;
@@ -415,12 +481,19 @@ onUnmounted(() => {
   /* 初始状态：卡片在原位，但被完全裁剪，不可见 */
   clip-path: inset(100% 0 0 0);
   pointer-events: none;
+  /* Removed hardware acceleration from the wrapper */
 }
 .text-card.expanded {
   /* 最终状态：裁剪区域完全打开，卡片完整可见 */
   clip-path: inset(0% 0 0 0);
   pointer-events: auto;
 }
+/* 8. 3D Tilt on Hover for Advantage Card */
+.text-card.expanded:hover {
+    transform: perspective(1000px) rotateX(2deg) rotateY(-2deg) translateZ(15px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2), 0 5px 15px rgba(0,0,0,0.15);
+}
+
 .liquidGlass-text.adv-typography {
   z-index: 3;
   padding: 2rem 2.5rem;
@@ -457,6 +530,12 @@ onUnmounted(() => {
   background: linear-gradient(90deg,#b0c4de 0%,#6a8bbd 100%);
   margin-bottom: 1rem;
   opacity: 0.7;
+  transform-origin: left;
+  transition: transform 0.8s 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  transform: scaleX(0);
+}
+.text-card.expanded .adv-divider {
+  transform: scaleX(1);
 }
 .adv-summary {
   font-size: 1.1rem;
@@ -485,7 +564,23 @@ onUnmounted(() => {
   position: relative;
   padding-left: 1.5rem;
   margin-bottom: 0.6rem;
+  /* 7. Staggered Fade-in for Advantage Details */
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
+
+.text-card.expanded .adv-details li {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger delays */
+.text-card.expanded .adv-details li:nth-child(1) { transition-delay: 0.6s; }
+.text-card.expanded .adv-details li:nth-child(2) { transition-delay: 0.7s; }
+.text-card.expanded .adv-details li:nth-child(3) { transition-delay: 0.8s; }
+.text-card.expanded .adv-details li:nth-child(4) { transition-delay: 0.9s; }
+
 .adv-details li::before {
   content: '▪';
   position: absolute;
@@ -717,5 +812,39 @@ onUnmounted(() => {
   .liquidGlass-text {
     padding: 1.5rem;
   }
+}
+
+/* Keyframes for new animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes kenBurns {
+  from {
+    transform: scale(1) translate(0, 0);
+  }
+  to {
+    transform: scale(1.1) translate(-2%, 2%);
+  }
+}
+
+.text-card .liquidGlass-effect {
+  /* Inherit border-radius from parent to prevent corner artifacts */
+  border-radius: inherit;
+  /* Force hardware acceleration on the effect layer itself */
+  will-change: filter, backdrop-filter;
+  transform: translateZ(0);
 }
 </style>

@@ -44,20 +44,22 @@ watch(() => route.path, () => {
 </script>
 
 <template>
-  <header class="liquidGlass-wrapper">
-    <div class="liquidGlass-effect"></div>
-    <div class="liquidGlass-tint"></div>
-    <div class="liquidGlass-shine"></div>
-    <div class="wrapper liquidGlass-text">
-      <nav ref="navRef">
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/portfolio">Portfolio</RouterLink>
-        <RouterLink to="/resume">Resume</RouterLink>
-        <RouterLink to="/contact">Contact</RouterLink>
-        <div class="nav-indicator" :style="indicatorStyle"></div>
-      </nav>
-    </div>
-  </header>
+  <div class="header-container">
+    <header class="liquidGlass-wrapper">
+      <div class="liquidGlass-effect"></div>
+      <div class="liquidGlass-tint"></div>
+      <div class="liquidGlass-shine"></div>
+      <div class="wrapper liquidGlass-text">
+        <nav ref="navRef">
+          <RouterLink to="/">Home</RouterLink>
+          <RouterLink to="/portfolio">Portfolio</RouterLink>
+          <RouterLink to="/resume">Resume</RouterLink>
+          <RouterLink to="/contact">Contact</RouterLink>
+          <div class="nav-indicator" :style="indicatorStyle"></div>
+        </nav>
+      </div>
+    </header>
+  </div>
   <RouterView />
 </template>
 
@@ -66,17 +68,20 @@ watch(() => route.path, () => {
   display: none; /* Hide the video */
 }
 
-header {
-  line-height: 1.5;
-  width: auto;
-  margin: 1.5rem auto;
-  border-radius: 1.5rem;
-  padding: 1rem 2rem;
+.header-container {
   position: fixed;
-  top: 0;
+  top: 1.5rem;
   left: 50%;
   transform: translateX(-50%);
   z-index: 100;
+}
+
+header {
+  line-height: 1.5;
+  width: auto;
+  border-radius: 1.5rem;
+  padding: 1rem 2rem;
+  /* position, top, left, transform, z-index are now on the parent */
 }
 
 .liquidGlass-wrapper {
@@ -98,6 +103,11 @@ header {
   filter: url(#glass-distortion-global);
   overflow: hidden;
   isolation: isolate;
+  /* Force hardware acceleration here to fix stacking context issues */
+  will-change: filter, backdrop-filter;
+  transform: translateZ(0);
+  /* Inherit border-radius to prevent corner artifacts */
+  border-radius: inherit;
 }
 
 .liquidGlass-tint {
@@ -105,6 +115,8 @@ header {
   position: absolute;
   inset: 0;
   background: rgba(255, 255, 255, 0.25);
+  /* Inherit border-radius to prevent corner artifacts */
+  border-radius: inherit;
 }
 
 .liquidGlass-shine {
@@ -114,6 +126,8 @@ header {
   overflow: hidden;
   box-shadow: inset 2px 2px 1px 0 rgba(255, 255, 255, 0.5),
     inset -1px -1px 1px 1px rgba(255, 255, 255, 0.5);
+  /* Inherit border-radius to prevent corner artifacts */
+  border-radius: inherit;
 }
 
 .liquidGlass-text {
