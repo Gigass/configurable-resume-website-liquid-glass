@@ -52,7 +52,7 @@ watch(() => route.path, () => {
       <div class="wrapper liquidGlass-text">
         <nav ref="navRef">
           <RouterLink to="/">Home</RouterLink>
-          <RouterLink to="/portfolio">Portfolio</RouterLink>
+          <RouterLink to="/project">Project</RouterLink>
           <RouterLink to="/resume">Resume</RouterLink>
           <RouterLink to="/contact">Contact</RouterLink>
           <div class="nav-indicator" :style="indicatorStyle"></div>
@@ -83,10 +83,6 @@ watch(() => route.path, () => {
 </template>
 
 <style scoped>
-.background-video {
-  display: none; /* Hide the video */
-}
-
 .header-container {
   position: fixed;
   top: 1.5rem;
@@ -103,56 +99,16 @@ header {
   /* position, top, left, transform, z-index are now on the parent */
 }
 
-.liquidGlass-wrapper {
-  position: relative;
-  display: flex;
-  font-weight: 600;
-  overflow: hidden;
-  color: black;
-  cursor: pointer;
-  box-shadow: 0 6px 6px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.1);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
-}
-
-.liquidGlass-effect {
-  position: absolute;
-  z-index: 0;
-  inset: 0;
-  backdrop-filter: blur(5px);
-  filter: url(#glass-distortion-global);
-  overflow: hidden;
-  isolation: isolate;
-  /* Force hardware acceleration here to fix stacking context issues */
-  will-change: filter, backdrop-filter;
-  transform: translateZ(0);
-  /* Inherit border-radius to prevent corner artifacts */
-  border-radius: inherit;
-}
-
-.liquidGlass-tint {
-  z-index: 1;
-  position: absolute;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.25);
-  /* Inherit border-radius to prevent corner artifacts */
-  border-radius: inherit;
-}
-
-.liquidGlass-shine {
-  z-index: 2;
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  box-shadow: inset 2px 2px 1px 0 rgba(255, 255, 255, 0.5),
-    inset -1px -1px 1px 1px rgba(255, 255, 255, 0.5);
-  /* Inherit border-radius to prevent corner artifacts */
-  border-radius: inherit;
-}
+/* 
+  The core .liquidGlass-* styles are now moved to a global css file.
+  Only component-specific styles remain.
+*/
 
 .liquidGlass-text {
   z-index: 3;
   color: #1a1a1a;
 }
+
 
 nav {
   position: relative;
@@ -171,17 +127,24 @@ nav {
   top: 0;
   left: 0;
   height: 100%;
-  background-color: rgba(255, 255, 255, 0.4);
+  /* New vibrant green theme gradient */
+  background: linear-gradient(135deg, #66ff99 0%, #00cc99 100%);
   border-radius: 12px;
   z-index: -1;
-  transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1); /* Smooth easing */
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  /* "Glowing" effect with a matching color shadow */
+  box-shadow: 0 0 10px rgba(0, 204, 153, 0.7), 
+              inset 0 1px 1px rgba(255, 255, 255, 0.6);
+  /* A slightly darker border for definition */
+  border: 1px solid rgba(0, 204, 153, 0.8);
 }
 
 nav a.router-link-exact-active {
-  color: #0d1117; /* Darker color for active state */
+  /* White text for high contrast against the green background */
+  color: #ffffff;
   font-weight: 900;
-  /* font-size change removed for smooth animation */
+  /* Dark shadow for readability on the bright indicator */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 nav a.router-link-exact-active:hover {

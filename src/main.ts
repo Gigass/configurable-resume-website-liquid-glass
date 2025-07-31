@@ -1,4 +1,5 @@
 import './assets/main.css'
+import './assets/liquid-glass.css' /* Import the new global styles */
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'

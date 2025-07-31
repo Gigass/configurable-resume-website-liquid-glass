@@ -13,6 +13,7 @@
   "dependencies": {
     "@vueuse/motion": "^3.0.3",
     "animejs": "^4.1.2",
+    "gsap": "^3.13.0",
     "pinia": "^3.0.3",
     "swiper": "^11.2.10",
     "vue": "^3.5.17",

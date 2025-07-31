@@ -188,7 +188,9 @@ onUnmounted(() => {
               </p>
             </div>
           </div>
-          <button @click="startIntroduction" class="intro-btn">View Introduction</button>
+          <button @click="startIntroduction" class="intro-btn">
+            <img src="@/assets/play-icon.png" alt="Start Introduction" class="play-icon">
+          </button>
         </div>
       </transition>
 
@@ -318,11 +320,12 @@ onUnmounted(() => {
   align-items: center;
   gap: 2rem;
   padding: 2rem;
-  /* 添加一个微妙的背景渐变，增加层次感 */
   background: radial-gradient(ellipse at center, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 70%);
-  /* 初始状态：完全可见 */
-  clip-path: inset(0 0 0 0);
-  transition: clip-path 0.8s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  
+  /* Upgraded to a "Circular Reveal" (Iris Wipe) animation */
+  clip-path: circle(75% at center); /* Start fully visible */
+  /* Faster duration and a more responsive "ease-out" curve */
+  transition: clip-path 0.7s cubic-bezier(0.5, 0, 0.2, 1);
 }
 
 /* 1. Hero Text Entrance Animation */
@@ -341,37 +344,47 @@ onUnmounted(() => {
   animation: none; /* Disable entrance animation when returning */
 }
 
-/* 进入动画（当元素从v-if="false"变为true时） */
+/* Entering (when returning to home) */
 .hero-fade-enter-from {
-  clip-path: inset(0 0 100% 0); /* 从底部关闭状态开始 */
+  clip-path: circle(0% at center);
 }
 
-/* 离开动画（当元素从v-if="true"变为false时） */
+/* Leaving (when starting introduction) */
 .hero-fade-leave-to {
-  clip-path: inset(100% 0 0 0); /* 从顶部开始关闭 */
+  clip-path: circle(0% at center);
 }
 
 .intro-btn {
-  background-color: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  color: #fff;
-  padding: 0.8rem 2.5rem;
-  border-radius: 50px;
-  font-size: 1.1rem;
-  font-weight: 600;
+  /* 只显示图片，去掉按钮边框和背景 */
+  padding: 0;
+  width: 160px; /* 16:9比例，高度为90px */
+  height: 90px;
+  border: none;
+  background: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
   transition: all 0.3s ease;
-  backdrop-filter: blur(5px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  position: relative;
-  overflow: hidden;
-  /* 2. Intro Button Breathing Effect */
   animation: pulse 2.5s infinite cubic-bezier(0.4, 0, 0.6, 1);
 }
-/* 3. Button Shine Effect */
-.intro-btn::after, .reset-btn::after {
+
+.intro-btn:hover {
+  transform: scale(1.1); /* 只保留放大效果 */
+}
+
+.play-icon {
+  width: 100%; /* 图片填满整个按钮区域 */
+  height: 100%;
+  object-fit: contain; /* 确保图片保持比例 */
+  transition: transform 0.3s ease;
+}
+
+.intro-btn:hover .play-icon {
+  transform: scale(1.1);
+}
+/* 3. Button Shine Effect - 只保留reset-btn的光泽效果 */
+.reset-btn::after {
   content: '';
   position: absolute;
   top: 0;
@@ -381,14 +394,8 @@ onUnmounted(() => {
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
   transition: left 0.6s ease;
 }
-.intro-btn:hover::after, .reset-btn:hover::after {
+.reset-btn:hover::after {
   left: 150%;
-}
-
-.intro-btn:hover {
-  background-color: rgba(255, 255, 255, 0.4);
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
 }
 
 .hero-container {
