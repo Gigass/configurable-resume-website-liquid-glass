@@ -15,9 +15,9 @@ const router = createRouter({
       component: () => import('../views/PortfolioView.vue')
     },
     {
-      path: '/resume',
-      name: 'resume',
-      component: () => import('../views/ResumeView.vue')
+      path: '/opensource',
+      name: 'opensource',
+      component: () => import('../views/OpenSourceView.vue')
     },
     {
       path: '/contact',

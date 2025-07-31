@@ -53,7 +53,7 @@ watch(() => route.path, () => {
         <nav ref="navRef">
           <RouterLink to="/">Home</RouterLink>
           <RouterLink to="/project">Project</RouterLink>
-          <RouterLink to="/resume">Resume</RouterLink>
+          <RouterLink to="/opensource">Open Source</RouterLink>
           <RouterLink to="/contact">Contact</RouterLink>
           <div class="nav-indicator" :style="indicatorStyle"></div>
         </nav>
