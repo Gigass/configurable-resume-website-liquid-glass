@@ -1,26 +1,38 @@
 [
   {
     "name": "xxl-job-oracle",
-    "url": "https://github.com/Gigass/xxl-job-oracle"
+    "repo": "Gigass/xxl-job-oracle",
+    "url": "https://github.com/Gigass/xxl-job-oracle",
+    "description": "基于xxl-job的Oracle数据库支持"
   },
   {
     "name": "cronGen",
-    "url": "https://github.com/Gigass/cronGen"
+    "repo": "Gigass/cronGen",
+    "url": "https://github.com/Gigass/cronGen",
+    "description": "Cron表达式生成器，支持Web界面配置"
   },
   {
     "name": "MarkdownExportHelper",
-    "url": "https://github.com/Gigass/MarkdownExportHelper"
+    "repo": "Gigass/MarkdownExportHelper",
+    "url": "https://github.com/Gigass/MarkdownExportHelper",
+    "description": "Markdown导出助手，支持多种格式转换"
   },
   {
     "name": "configurable-resume-website-liquid-glass",
-    "url": "https://github.com/Gigass/configurable-resume-website-liquid-glass"
+    "repo": "Gigass/configurable-resume-website-liquid-glass",
+    "url": "https://github.com/Gigass/configurable-resume-website-liquid-glass",
+    "description": "可配置的简历网站，使用液态玻璃效果"
   },
   {
     "name": "MarketVision",
-    "url": "https://github.com/Gigass/MarketVision"
+    "repo": "Gigass/MarketVision",
+    "url": "https://github.com/Gigass/MarketVision",
+    "description": "市场分析与可视化工具"
   },
   {
     "name": "yolo-ios-app",
-    "url": "https://github.com/Gigass/yolo-ios-app"
+    "repo": "Gigass/yolo-ios-app",
+    "url": "https://github.com/Gigass/yolo-ios-app",
+    "description": "基于YOLO的iOS目标检测应用"
   }
 ]

@@ -37,7 +37,7 @@
 
     <div class="projects-grid">
       <!-- Loop through projects and create a card for each -->
-      <div v-for="project in projects" :key="project.name" class="custom-github-card liquidGlass-wrapper">
+      <div v-for="project in projects" :key="project.name" class="github-card liquidGlass-wrapper">
         <!-- Liquid Glass Effect Layers -->
         <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
         <div class="liquidGlass-tint"></div>
@@ -53,40 +53,49 @@
           </div>
           <p class="repo-description">{{ project.repoData ? project.repoData.description : project.description }}</p>
 
+          <!-- GitHub Stats -->
+          <div class="github-stats">
+            <div class="stats-item">
+              <svg class="stats-icon" viewBox="0 0 16 16" version="1.1" width="16" height="16"><path fill-rule="evenodd" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 13.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.192L.646 6.374a.75.75 0 01.416-1.28l4.21-.612L7.327.668A.75.75 0 018 .25z"></path></svg>
+              <span>{{ project.repoData ? project.repoData.stargazers_count : '加载中...' }} Stars</span>
+            </div>
+            <div class="stats-item">
+              <svg class="stats-icon" viewBox="0 0 16 16" version="1.1" width="16" height="16"><path fill-rule="evenodd" d="M5 3.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm0 2.5a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm0 2.5a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm0 2.5a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm1.625-7.5a.75.75 0 100-1.5.75.75 0 000 1.5zM8 4a.75.75 0 100-1.5A.75.75 0 008 4zm2.125.75a.75.75 0 100-1.5.75.75 0 000 1.5zM8 6.5a.75.75 0 100-1.5.75.75 0 000 1.5zm2.125.75a.75.75 0 100-1.5.75.75 0 000 1.5zM8 9a.75.75 0 100-1.5.75.75 0 000 1.5zm2.125.75a.75.75 0 100-1.5.75.75 0 000 1.5zM8 11.5a.75.75 0 100-1.5.75.75 0 000 1.5zm2.125.75a.75.75 0 100-1.5.75.75 0 000 1.5z"></path></svg>
+              <span>{{ project.repoData ? project.repoData.forks_count : '加载中...' }} Forks</span>
+            </div>
+            <div class="stats-item">
+              <svg class="stats-icon" viewBox="0 0 16 16" version="1.1" width="16" height="16"><path fill-rule="evenodd" d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8zm9 3a1 1 0 11-2 0 1 1 0 012 0zm-.25-6.25a.75.75 0 00-1.5 0v3.5a.75.75 0 001.5 0v-3.5z"></path></svg>
+              <span>{{ project.repoData ? project.repoData.open_issues_count : '加载中...' }} Issues</span>
+            </div>
+            <div class="stats-item">
+              <svg class="stats-icon" viewBox="0 0 16 16" version="1.1" width="16" height="16"><path fill-rule="evenodd" d="M1.643 3.143L.427 1.927A.25.25 0 000 2.104V5.75c0 .138.112.25.25.25h3.646a.25.25 0 00.177-.427L2.715 4.215a6.5 6.5 0 11-1.18 4.458.75.75 0 10-1.493.154 8.001 8.001 0 101.6-5.684zM7.75 4a.75.75 0 01.75.75v2.992l2.028.812a.75.75 0 01-.557 1.392l-2.5-1A.75.75 0 017 8.25v-3.5A.75.75 0 017.75 4z"></path></svg>
+              <span>{{ project.repoData ? new Date(project.repoData.updated_at).toLocaleDateString() : '加载中...' }}</span>
+            </div>
+          </div>
+
+          <!-- Language -->
+          <div v-if="project.repoData && project.repoData.language" class="language-section">
+            <div class="language-item">
+              <span class="language-color" :style="{ backgroundColor: getLanguageColor(project.repoData.language) }"></span>
+              <span>{{ project.repoData.language }}</span>
+            </div>
+          </div>
+
           <!-- Contributors List -->
           <div v-if="project.contributors && project.contributors.length" class="contributors-section">
             <h4 class="section-title">主要贡献者</h4>
             <div class="contributors-list">
-              <a v-for="contributor in project.contributors.slice(0, 5)" :key="contributor.id" :href="contributor.html_url" target="_blank">
-                <img :src="contributor.avatar_url" :alt="contributor.login" class="contributor-avatar">
+              <a v-for="contributor in project.contributors.slice(0, 5)" :key="contributor.id" :href="contributor.html_url" target="_blank" class="contributor-link">
+                <img :src="contributor.avatar_url" :alt="contributor.login" class="contributor-avatar" :title="`${contributor.login} - ${contributor.contributions} 次提交`">
               </a>
             </div>
           </div>
 
-          <div v-if="project.repoData" class="card-footer">
-            <div class="footer-item">
-              <span class="language-color" :style="{ backgroundColor: getLanguageColor(project.repoData.language) }"></span>
-              <span>{{ project.repoData.language }}</span>
-            </div>
-            <a :href="`${project.repoData.html_url}/stargazers`" target="_blank" class="footer-item">
-              <svg class="icon" viewBox="0 0 16 16" version="1.1" width="16" height="16"><path fill-rule="evenodd" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 13.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.192L.646 6.374a.75.75 0 01.416-1.28l4.21-.612L7.327.668A.75.75 0 018 .25z"></path></svg>
-              <span>{{ project.repoData.stargazers_count }}</span>
-            </a>
-            <a :href="`${project.repoData.html_url}/network/members`" target="_blank" class="footer-item">
-              <svg class="icon" viewBox="0 0 16 16" version="1.1" width="16" height="16"><path fill-rule="evenodd" d="M5 3.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm0 2.5a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm0 2.5a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm0 2.5a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm1.625-7.5a.75.75 0 100-1.5.75.75 0 000 1.5zM8 4a.75.75 0 100-1.5A.75.75 0 008 4zm2.125.75a.75.75 0 100-1.5.75.75 0 000 1.5zM8 6.5a.75.75 0 100-1.5.75.75 0 000 1.5zm2.125.75a.75.75 0 100-1.5.75.75 0 000 1.5zM8 9a.75.75 0 100-1.5.75.75 0 000 1.5zm2.125.75a.75.75 0 100-1.5.75.75 0 000 1.5zM8 11.5a.75.75 0 100-1.5.75.75 0 000 1.5zm2.125.75a.75.75 0 100-1.5.75.75 0 000 1.5z"></path></svg>
-              <span>{{ project.repoData.forks_count }}</span>
-            </a>
-            <div class="footer-item">
-              <svg class="icon" viewBox="0 0 16 16" version="1.1" width="16" height="16"><path fill-rule="evenodd" d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8zm9 3a1 1 0 11-2 0 1 1 0 012 0zm-.25-6.25a.75.75 0 00-1.5 0v3.5a.75.75 0 001.5 0v-3.5z"></path></svg>
-              <span>{{ project.repoData.open_issues_count }} Issues</span>
-            </div>
-            <div class="footer-item">
-              <span>Updated {{ new Date(project.repoData.updated_at).toLocaleDateString() }}</span>
-            </div>
-          </div>
-          <div v-else class="loading-footer">
-            <span>Loading stats...</span>
-          </div>
+          <!-- View on GitHub Button -->
+          <a :href="project.url" target="_blank" class="view-github-btn">
+            <svg class="github-icon" viewBox="0 0 16 16" version="1.1" width="16" height="16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
+            在 GitHub 上查看
+          </a>
         </div>
       </div>
     </div>
@@ -109,6 +118,7 @@ interface Contributor {
   login: string;
   avatar_url: string;
   html_url: string;
+  contributions: number; // Added contributions for contributor list
 }
 
 interface RepoData {
@@ -148,6 +158,8 @@ interface Project {
   description: string;
   repoData: RepoData | null;
   contributors: Contributor[] | null;
+  loading: boolean;
+  error: string | null;
 }
 
 const projects = ref<Project[]>([]);
@@ -169,31 +181,44 @@ const fetchProjectsData = async () => {
     const projectList = await response.json();
     
     // Initialize projects ref with basic data and repoData as null
-    projects.value = projectList.map((p: any) => ({ ...p, repoData: null, contributors: null }));
+    projects.value = projectList.map((p: any) => ({ 
+      ...p, 
+      repoData: null, 
+      contributors: null,
+      loading: true,
+      error: null
+    }));
 
     // 2. Fetch detailed data for each project from GitHub API
-    projects.value.forEach(async (project) => {
+    projects.value.forEach(async (project, index) => {
       try {
+        // Fetch repo data
         const repoResponse = await fetch(`https://api.github.com/repos/${project.repo}`);
         if (repoResponse.ok) {
           project.repoData = await repoResponse.json();
         } else {
           console.error(`Failed to fetch GitHub repo data for ${project.repo}:`, repoResponse.status);
+          project.error = `无法加载仓库数据 (${repoResponse.status})`;
         }
-      } catch (error) {
-        console.error(`Error fetching GitHub repo data for ${project.repo}:`, error);
-      }
 
-      // Fetch contributors data
-      try {
-        const contributorsResponse = await fetch(`https://api.github.com/repos/${project.repo}/contributors`);
-        if (contributorsResponse.ok) {
-          project.contributors = await contributorsResponse.json();
-        } else {
-          console.error(`Failed to fetch contributors for ${project.repo}:`, contributorsResponse.status);
+        // Fetch contributors data
+        try {
+          const contributorsResponse = await fetch(`https://api.github.com/repos/${project.repo}/contributors`);
+          if (contributorsResponse.ok) {
+            project.contributors = await contributorsResponse.json();
+          } else {
+            console.error(`Failed to fetch contributors for ${project.repo}:`, contributorsResponse.status);
+          }
+        } catch (error) {
+          console.error(`Error fetching contributors for ${project.repo}:`, error);
         }
+
+        // Mark loading as complete
+        project.loading = false;
       } catch (error) {
-        console.error(`Error fetching contributors for ${project.repo}:`, error);
+        console.error(`Error fetching GitHub data for ${project.repo}:`, error);
+        project.error = '加载数据时发生错误';
+        project.loading = false;
       }
     });
   } catch (error) {
@@ -299,7 +324,7 @@ const getLanguageColor = (language: string): string => {
   max-width: 1200px;
   margin-bottom: 3rem;
 }
-.custom-github-card {
+.github-card {
   /* Remove direct background and border, as liquidGlass-wrapper will handle it */
   border-radius: 15px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0, 0, 0, 0.08);
@@ -311,9 +336,12 @@ const getLanguageColor = (language: string): string => {
   /* Add overflow hidden for the glass effect */
   overflow: hidden;
   position: relative;
+  background-color: rgba(255, 255, 255, 0.15);
+  padding: 0;
+  margin-bottom: 1rem;
 }
 
-.custom-github-card:hover {
+.github-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.16), 0 6px 20px rgba(0, 0, 0, 0.12);
 }
@@ -341,6 +369,7 @@ const getLanguageColor = (language: string): string => {
 
 .repo-name:hover {
   text-decoration: underline;
+  color: #0366d6;
 }
 
 .repo-description {
@@ -351,28 +380,48 @@ const getLanguageColor = (language: string): string => {
   font-weight: 500;
 }
 
-.card-footer {
+.github-stats {
   display: flex;
-  align-items: center;
   flex-wrap: wrap;
   gap: 1rem;
+  margin-bottom: 1.5rem;
   font-size: 0.9rem;
   color: #3a4a5d;
   font-weight: 500;
-  border-top: 1px solid #e1e4e8;
-  padding-top: 1rem;
 }
 
-.footer-item {
+.stats-item {
   display: flex;
   align-items: center;
   gap: 0.3rem;
-  text-decoration: none;
-  color: inherit;
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 0.3rem 0.6rem;
+  border-radius: 12px;
+  transition: all 0.3s ease;
 }
 
-.footer-item .icon {
+.stats-item:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.stats-icon {
   fill: currentColor;
+}
+
+.language-section {
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.language-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 0.3rem 0.8rem;
+  border-radius: 12px;
+  display: inline-flex;
 }
 
 .language-color {
@@ -380,6 +429,71 @@ const getLanguageColor = (language: string): string => {
   height: 12px;
   border-radius: 50%;
   border: 1px solid rgba(0,0,0,0.1);
+}
+
+.contributors-section {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.section-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #3a4a5d;
+  margin-bottom: 0.8rem;
+}
+
+.contributors-list {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.contributor-link {
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+}
+
+.contributor-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.contributor-avatar:hover {
+  transform: scale(1.1);
+}
+
+.view-github-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.5rem;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, #2ea44f 0%, #22863a 100%);
+  box-shadow: 0 4px 15px rgba(46, 164, 79, 0.4);
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+.view-github-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(46, 164, 79, 0.6);
+}
+
+.github-icon {
+  fill: currentColor;
+  width: 16px;
+  height: 16px;
 }
 
 .loading-container {
