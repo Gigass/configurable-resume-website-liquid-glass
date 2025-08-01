@@ -7,6 +7,10 @@
   cursor: pointer;
   box-shadow: 0 6px 6px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.1);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
+  /* 增强硬件加速 */
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
 }
 
 .liquidGlass-effect {
@@ -20,6 +24,11 @@
   will-change: filter, backdrop-filter;
   transform: translateZ(0);
   border-radius: inherit;
+  /* 减少重绘 */
+  contain: paint;
+  /* 优化渲染性能 */
+  -webkit-transform: translate3d(0, 0, 0);
+  -webkit-backface-visibility: hidden;
 }
 
 .liquidGlass-tint {
@@ -28,6 +37,9 @@
   inset: 0;
   background: rgba(255, 255, 255, 0.25);
   border-radius: inherit;
+  /* 增强硬件加速 */
+  transform: translateZ(0);
+  will-change: opacity;
 }
 
 .liquidGlass-shine {
@@ -38,4 +50,15 @@
   box-shadow: inset 2px 2px 1px 0 rgba(255, 255, 255, 0.5),
     inset -1px -1px 1px 1px rgba(255, 255, 255, 0.5);
   border-radius: inherit;
+  /* 增强硬件加速 */
+  transform: translateZ(0);
+  will-change: opacity;
+}
+
+.liquidGlass-text {
+  z-index: 3;
+  position: relative;
+  /* 增强硬件加速 */
+  transform: translateZ(0);
+  will-change: transform;
 } 

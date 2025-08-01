@@ -51,30 +51,32 @@
               {{ project.name }}
             </a>
           </div>
-          <p class="repo-description">{{ project.repoData ? project.repoData.description : project.description }}</p>
+          <!-- 使用v-once减少重复渲染 -->
+          <p v-once class="repo-description">{{ project.repoData ? project.repoData.description : project.description }}</p>
 
           <!-- GitHub Stats -->
           <div class="github-stats">
-            <div class="stats-item">
+            <!-- 使用v-memo减少不必要的重新渲染 -->
+            <div v-memo="[project.repoData?.stargazers_count]" class="stats-item">
               <svg class="stats-icon" viewBox="0 0 16 16" version="1.1" width="16" height="16"><path fill-rule="evenodd" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 13.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.192L.646 6.374a.75.75 0 01.416-1.28l4.21-.612L7.327.668A.75.75 0 018 .25z"></path></svg>
               <span>{{ project.repoData ? project.repoData.stargazers_count : '加载中...' }} Stars</span>
             </div>
-            <div class="stats-item">
+            <div v-memo="[project.repoData?.forks_count]" class="stats-item">
               <svg class="stats-icon" viewBox="0 0 16 16" version="1.1" width="16" height="16"><path fill-rule="evenodd" d="M5 3.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm0 2.5a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm0 2.5a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm0 2.5a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm1.625-7.5a.75.75 0 100-1.5.75.75 0 000 1.5zM8 4a.75.75 0 100-1.5A.75.75 0 008 4zm2.125.75a.75.75 0 100-1.5.75.75 0 000 1.5zM8 6.5a.75.75 0 100-1.5.75.75 0 000 1.5zm2.125.75a.75.75 0 100-1.5.75.75 0 000 1.5zM8 9a.75.75 0 100-1.5.75.75 0 000 1.5zm2.125.75a.75.75 0 100-1.5.75.75 0 000 1.5zM8 11.5a.75.75 0 100-1.5.75.75 0 000 1.5zm2.125.75a.75.75 0 100-1.5.75.75 0 000 1.5z"></path></svg>
               <span>{{ project.repoData ? project.repoData.forks_count : '加载中...' }} Forks</span>
             </div>
-            <div class="stats-item">
+            <div v-memo="[project.repoData?.open_issues_count]" class="stats-item">
               <svg class="stats-icon" viewBox="0 0 16 16" version="1.1" width="16" height="16"><path fill-rule="evenodd" d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8zm9 3a1 1 0 11-2 0 1 1 0 012 0zm-.25-6.25a.75.75 0 00-1.5 0v3.5a.75.75 0 001.5 0v-3.5z"></path></svg>
               <span>{{ project.repoData ? project.repoData.open_issues_count : '加载中...' }} Issues</span>
             </div>
-            <div class="stats-item">
+            <div v-memo="[project.repoData?.updated_at]" class="stats-item">
               <svg class="stats-icon" viewBox="0 0 16 16" version="1.1" width="16" height="16"><path fill-rule="evenodd" d="M1.643 3.143L.427 1.927A.25.25 0 000 2.104V5.75c0 .138.112.25.25.25h3.646a.25.25 0 00.177-.427L2.715 4.215a6.5 6.5 0 11-1.18 4.458.75.75 0 10-1.493.154 8.001 8.001 0 101.6-5.684zM7.75 4a.75.75 0 01.75.75v2.992l2.028.812a.75.75 0 01-.557 1.392l-2.5-1A.75.75 0 017 8.25v-3.5A.75.75 0 017.75 4z"></path></svg>
               <span>{{ project.repoData ? new Date(project.repoData.updated_at).toLocaleDateString() : '加载中...' }}</span>
             </div>
           </div>
 
           <!-- Language -->
-          <div v-if="project.repoData && project.repoData.language" class="language-section">
+          <div v-if="project.repoData && project.repoData.language" v-memo="[project.repoData.language]" class="language-section">
             <div class="language-item">
               <span class="language-color" :style="{ backgroundColor: getLanguageColor(project.repoData.language) }"></span>
               <span>{{ project.repoData.language }}</span>
@@ -82,7 +84,7 @@
           </div>
 
           <!-- Contributors List -->
-          <div v-if="project.contributors && project.contributors.length" class="contributors-section">
+          <div v-if="project.contributors && project.contributors.length" v-memo="[project.contributors.length]" class="contributors-section">
             <h4 class="section-title">主要贡献者</h4>
             <div class="contributors-list">
               <a v-for="contributor in project.contributors.slice(0, 5)" :key="contributor.id" :href="contributor.html_url" target="_blank" class="contributor-link">
@@ -189,38 +191,71 @@ const fetchProjectsData = async () => {
       error: null
     }));
 
-    // 2. Fetch detailed data for each project from GitHub API
-    projects.value.forEach(async (project, index) => {
-      try {
-        // Fetch repo data
-        const repoResponse = await fetch(`https://api.github.com/repos/${project.repo}`);
-        if (repoResponse.ok) {
-          project.repoData = await repoResponse.json();
-        } else {
-          console.error(`Failed to fetch GitHub repo data for ${project.repo}:`, repoResponse.status);
-          project.error = `无法加载仓库数据 (${repoResponse.status})`;
-        }
-
-        // Fetch contributors data
-        try {
-          const contributorsResponse = await fetch(`https://api.github.com/repos/${project.repo}/contributors`);
-          if (contributorsResponse.ok) {
-            project.contributors = await contributorsResponse.json();
-          } else {
-            console.error(`Failed to fetch contributors for ${project.repo}:`, contributorsResponse.status);
-          }
-        } catch (error) {
-          console.error(`Error fetching contributors for ${project.repo}:`, error);
-        }
-
-        // Mark loading as complete
-        project.loading = false;
-      } catch (error) {
-        console.error(`Error fetching GitHub data for ${project.repo}:`, error);
-        project.error = '加载数据时发生错误';
-        project.loading = false;
+    // 2. 批量获取所有项目的数据，减少DOM更新次数
+    const fetchAllProjectData = async () => {
+      const tempProjects = [...projects.value];
+      
+      // 定义类型接口
+      interface RepoResult {
+        repo: string;
+        data?: any;
+        error?: string;
       }
-    });
+      
+      // 并行获取所有项目的仓库数据
+      const repoPromises = tempProjects.map(project => 
+        fetch(`https://api.github.com/repos/${project.repo}`)
+          .then(res => res.ok ? res.json() : Promise.reject(`Failed with status ${res.status}`))
+          .then(data => ({ repo: project.repo, data }) as RepoResult)
+          .catch(error => ({ repo: project.repo, error: String(error) }) as RepoResult)
+      );
+      
+      // 等待所有仓库数据获取完成
+      const repoResults = await Promise.allSettled(repoPromises);
+      
+      // 更新临时数组中的仓库数据
+      repoResults.forEach((result, index) => {
+        if (result.status === 'fulfilled') {
+          const value = result.value;
+          if (value.data) {
+            tempProjects[index].repoData = value.data;
+          } else if (value.error) {
+            tempProjects[index].error = value.error;
+          }
+        } else {
+          tempProjects[index].error = result.reason;
+        }
+      });
+      
+      // 并行获取所有项目的贡献者数据
+      const contributorPromises = tempProjects.map(project => 
+        fetch(`https://api.github.com/repos/${project.repo}/contributors`)
+          .then(res => res.ok ? res.json() : Promise.reject(`Failed with status ${res.status}`))
+          .then(data => ({ repo: project.repo, data }) as RepoResult)
+          .catch(error => ({ repo: project.repo, error: String(error) }) as RepoResult)
+      );
+      
+      // 等待所有贡献者数据获取完成
+      const contributorResults = await Promise.allSettled(contributorPromises);
+      
+      // 更新临时数组中的贡献者数据
+      contributorResults.forEach((result, index) => {
+        if (result.status === 'fulfilled') {
+          const value = result.value;
+          if (value.data) {
+            tempProjects[index].contributors = value.data;
+          }
+        }
+        // 标记加载完成
+        tempProjects[index].loading = false;
+      });
+      
+      // 一次性更新所有项目数据，减少DOM重绘次数
+      projects.value = tempProjects;
+    };
+    
+    // 执行批量获取
+    fetchAllProjectData();
   } catch (error) {
     console.error('Error fetching projects.json:', error);
   }
@@ -256,6 +291,7 @@ const getLanguageColor = (language: string): string => {
   z-index: 1;
 }
 
+/* 优化背景图片渲染 */
 .opensource-view::before {
   content: '';
   position: fixed;
@@ -271,6 +307,9 @@ const getLanguageColor = (language: string): string => {
   /* 硬件加速以防止滚动时闪烁 */
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+  perspective: 1000px;
 }
 
 .intro-container {
@@ -328,7 +367,7 @@ const getLanguageColor = (language: string): string => {
   /* Remove direct background and border, as liquidGlass-wrapper will handle it */
   border-radius: 15px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -339,10 +378,16 @@ const getLanguageColor = (language: string): string => {
   background-color: rgba(255, 255, 255, 0.15);
   padding: 0;
   margin-bottom: 1rem;
+  /* 添加硬件加速 */
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  will-change: transform, box-shadow;
+  /* 减少重绘 */
+  contain: layout style paint;
 }
 
 .github-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-5px) translate3d(0, 0, 0);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.16), 0 6px 20px rgba(0, 0, 0, 0.12);
 }
 
