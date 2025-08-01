@@ -332,7 +332,7 @@ onUnmounted(() => {
   flex-direction: column; /* Stack hero-container and button vertically */
   justify-content: center;
   align-items: center;
-  gap: 1.5rem; /* Adjust gap */
+  gap: 0; /* Adjust gap */
   padding: 1rem;
   /* background: radial-gradient(ellipse at center, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 70%); */
   

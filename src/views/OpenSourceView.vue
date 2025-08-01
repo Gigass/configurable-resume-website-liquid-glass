@@ -421,13 +421,6 @@ onMounted(() => {
   margin-bottom: 1rem;
 }
 
-.section-title {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #3a4a5d;
-  margin-bottom: 0.5rem;
-}
-
 .contributors-list {
   display: flex;
   align-items: center;
@@ -497,12 +490,11 @@ onMounted(() => {
 }
 
 .section {
-  margin-top: 2rem;
 }
 
 .section-title {
-  font-size: 1.8rem;
-  font-weight: 700;
+  font-size: 2rem;
+  font-weight: 800;
   color: #2a3a4d;
   margin-bottom: 1rem;
   border-bottom: 2px solid rgba(0, 92, 191, 0.2);
