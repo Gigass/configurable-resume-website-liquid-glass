@@ -19,94 +19,32 @@ import lb6 from '@/assets/lb/lb6.png';
 import lb7 from '@/assets/lb/lb7.png';
 import lb8 from '@/assets/lb/lb8.png';
 
-const advantages = [
-  {
-    "icon": "👨‍💻",
-    "title": "技术平台全周期主导与团队赋能",
-    "summary": "具备技术选型、架构设计到项目落地的全栈能力，擅长全流程管理与团队建设。",
-    "details": [
-      "主导核心平台从0到1的构建，实现架构落地与稳定迭代。",
-      "搭建技术团队，推动知识传承与高效协同。",
-      "为企业数字化转型提供持续技术支撑。"
-    ]
-  },
-  {
-    "icon": "🏭",
-    "title": "制造业数字化转型深耕",
-    "summary": "拥有大型制造企业SaaS、CRM、LIMS等系统研发与落地主导经验。",
-    "details": [
-      "精通业务流程重构、自动化与数据驱动平台架构设计。",
-      "为企业定制端到端创新解决方案，提升核心竞争力。"
-    ]
-  },
-  {
-    "icon": "💬",
-    "title": "企业微信生态集成与开发",
-    "summary": "主导企业微信与OA、CRM系统高效集成，提升企业移动协作能力。",
-    "details": [
-      "全程负责企微生态系统集成与自动化流程开发。",
-      "打造高效业务场景下的移动化解决方案。"
-    ]
-  },
-  {
-    "icon": "🧩",
-    "title": "全栈视野与微服务架构落地",
-    "summary": "精通Java/Spring体系、Golang高并发，具备分布式系统设计能力。",
-    "details": [
-      "熟练数据库、缓存、消息队列等底层技术。",
-      "主导高可用与高性能的企业级平台架构演进。"
-    ]
-  },
-  {
-    "icon": "☁️",
-    "title": "云原生与DevOps实战",
-    "summary": "主导平台容器化、Kubernetes运维与多租户SaaS部署。",
-    "details": [
-      "推动CI/CD流水线建设与自动化运维。",
-      "具备全球化与高可用架构部署的丰富实践。"
-    ]
-  },
-  {
-    "icon": "📱",
-    "title": "全栈开发与多端系统交付",
-    "summary": "覆盖前端Vue、小程序至后端服务，实现端到端敏捷开发。",
-    "details": [
-      "擅长前后端分离与系统集成，多端协同交付。",
-      "优化用户体验与提升业务响应效率。"
-    ]
-  },
-  {
-    "icon": "🤖",
-    "title": "AI工程化与智能平台研发",
-    "summary": "参与AI数据平台、智能机器人项目，推动AI与业务深度融合。",
-    "details": [
-      "将机器学习与自动化技术应用于实际业务流程。",
-      "实现数据驱动的智能决策与业务效率提升。"
-    ]
-  },
-  {
-    "icon": "🚀",
-    "title": "持续技术创新与系统化能力",
-    "summary": "保持技术热情与敏锐洞察，善于将创新转化为业务价值。",
-    "details": [
-      "系统分析与解决复杂问题，推动技术架构演进。",
-      "不断优化项目实践与组织技术能力。"
-    ]
-  }
-];
+import { useSiteData } from '@/stores/sitedata';
 
-const skillTags = [
-  'Java', 'Spring', 'Vue3', 'Golang', 'K8s', 'SaaS', '微服务', '数据库', 'AI', '企业微信', '全栈', '云原生', '自动化', '数据可视化', '移动端',
-];
+interface Advantage {
+  icon: string;
+  title: string;
+  summary: string;
+  details: string[];
+}
+
+const { siteData } = useSiteData();
+
+const homeData = computed(() => siteData.value?.home);
 
 // 将优势和图片数据结合
-const slidesData = computed(() => advantages.map((advantage, index) => {
-  const images = [lb1, lb2, lb3, lb4, lb5, lb6, lb7, lb8];
-  return {
-    ...advantage,
-    image: images[index % images.length], // 循环使用图片
-  };
-}));
+const slidesData = computed(() => {
+  if (!homeData.value?.advantages) {
+    return [];
+  }
+  return homeData.value.advantages.map((advantage, index) => {
+    const images = [lb1, lb2, lb3, lb4, lb5, lb6, lb7, lb8];
+    return {
+      ...advantage,
+      image: images[index % images.length], // 循环使用图片
+    };
+  });
+});
 
 const expandedCard = ref<number | null>(null);
 const activeIndex = ref(0);
@@ -175,16 +113,16 @@ onUnmounted(() => {
 
     <div class="main-content-area">
       <transition name="hero-fade">
-        <div v-if="!introductionStarted" class="hero-overlay">
+        <div v-if="!introductionStarted && homeData" class="hero-overlay">
           <div class="hero-container liquidGlass-wrapper">
             <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
             <div class="liquidGlass-tint"></div>
             <div class="liquidGlass-shine"></div>
             <div class="liquidGlass-text">
-              <h1 class="hero-title">Chris Yang</h1>
-              <p class="hero-subtitle">资深Java工程师 | 技术平台构建者</p>
+              <h1 class="hero-title">{{ homeData.hero.title }}</h1>
+              <p class="hero-subtitle">{{ homeData.hero.subtitle }}</p>
               <p class="hero-description">
-                具备多年企业级平台研发和数字化转型经验，主导从0到1的技术架构设计与核心系统落地，精通制造业SaaS、CRM、LIMS等业务场景。熟悉全栈开发、云原生架构和DevOps，拥有企业微信生态集成及AI智能平台项目实践。善于团队建设与协作，能将前沿技术高效转化为实际业务价值，持续推动企业创新和效率提升。
+                {{ homeData.hero.description }}
               </p>
             </div>
           </div>

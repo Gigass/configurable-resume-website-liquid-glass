@@ -1,8 +1,12 @@
 <script setup lang="ts">
-import { ref, watch, nextTick } from 'vue';
+import { ref, watch, nextTick, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { RouterLink, RouterView } from 'vue-router';
 import Background from '@/views/overlay/Background.vue';
+import { useSiteData } from '@/stores/sitedata';
+
+const { siteData } = useSiteData();
+const navLinks = computed(() => siteData.value?.layout.navigation);
 
 const navRef = ref<HTMLElement | null>(null);
 const indicatorStyle = ref({
@@ -51,11 +55,8 @@ watch(() => route.path, () => {
       <div class="liquidGlass-tint"></div>
       <div class="liquidGlass-shine"></div>
       <div class="wrapper liquidGlass-text">
-        <nav ref="navRef">
-          <RouterLink to="/">Home</RouterLink>
-          <RouterLink to="/project">Project</RouterLink>
-          <RouterLink to="/opensource">Open Source</RouterLink>
-          <RouterLink to="/contact">Contact</RouterLink>
+        <nav ref="navRef" v-if="navLinks">
+          <RouterLink v-for="link in navLinks" :key="link.to" :to="link.to">{{ link.name }}</RouterLink>
           <div class="nav-indicator" :style="indicatorStyle"></div>
         </nav>
       </div>

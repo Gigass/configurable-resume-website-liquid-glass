@@ -1,6 +1,6 @@
 <template>
   <div class="opensource-view">
-    <div class="content-wrapper">
+    <div class="content-wrapper" v-if="opensourceData">
       
       <!-- Introduction Container -->
       <div class="intro-container liquidGlass-wrapper">
@@ -8,21 +8,21 @@
         <div class="liquidGlass-tint"></div>
         <div class="liquidGlass-shine"></div>
         <div class="liquidGlass-text">
-          <div v-if="introContent" class="structured-content">
+          <div v-if="opensourceData.intro" class="structured-content">
             <div class="section growth-section">
-              <h2 class="section-title">{{ introContent.personal_growth.title }}</h2>
-              <p>{{ introContent.personal_growth.content }}</p>
+              <h2 class="section-title">{{ opensourceData.intro.personal_growth.title }}</h2>
+              <p>{{ opensourceData.intro.personal_growth.content }}</p>
             </div>
 
             <hr class="separator">
-            <blockquote class="quote">"{{ introContent.quote }}"</blockquote>
+            <blockquote class="quote">"{{ opensourceData.intro.quote }}"</blockquote>
           </div>
         </div>
       </div>
 
       <!-- Projects Grid -->
       <div class="projects-grid">
-        <div v-for="project in projects" :key="project.name" class="project-card-wrapper liquidGlass-wrapper">
+        <div v-for="project in opensourceData.projects" :key="project.name" class="project-card-wrapper liquidGlass-wrapper">
           <!-- Liquid Glass Layers -->
           <div class="liquidGlass-effect"></div>
           <div class="liquidGlass-tint"></div>
@@ -32,7 +32,7 @@
           <a :href="project.url" target="_blank" class="card-link">
             <img 
               class="github-stats-card"
-              :src="`https://github-readme-stats.vercel.app/api/pin/?username=${project.repo.split('/')[0]}&repo=${project.repo.split('/')[1]}&theme=dark&bg_color=00000000&border_radius=15&hide_border=true&title_color=000000&text_color=333333&icon_color=00cc66`"
+              :src="`https://github-readme-stats.vercel.app/api/pin/?username=${project.repo.split('/')[0]}&repo=${project.repo.split('/')[1]}&theme=${opensourceData.githubStatsCard.theme}&bg_color=${opensourceData.githubStatsCard.bg_color}&border_radius=${opensourceData.githubStatsCard.border_radius}&hide_border=${opensourceData.githubStatsCard.hide_border}&title_color=${opensourceData.githubStatsCard.title_color}&text_color=${opensourceData.githubStatsCard.text_color}&icon_color=${opensourceData.githubStatsCard.icon_color}`"
               :alt="project.name"
             />
           </a>
@@ -41,9 +41,9 @@
 
       <!-- More Projects Link -->
       <div class="more-projects">
-        <p>想要探索更多我的项目吗？</p>
-        <a href="https://github.com/Gigass" target="_blank" class="github-link">
-          访问我的 GitHub 主页
+        <p>{{ opensourceData.moreProjects.text }}</p>
+        <a :href="opensourceData.moreProjects.url" target="_blank" class="github-link">
+          {{ opensourceData.moreProjects.buttonText }}
         </a>
       </div>
 
@@ -52,79 +52,11 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { computed } from 'vue';
+import { useSiteData } from '@/stores/sitedata';
 
-// Interfaces can be simplified as we fetch less data manually
-interface Project {
-  name: string;
-  repo: string;
-  url: string;
-  description: string;
-  // repoData and contributors are no longer needed
-}
-
-interface IntroContent {
-  title: string;
-  introduction: string;
-  principles: {
-    title: string;
-    description: string;
-    points: string[];
-  };
-  community: {
-    title: string;
-    content: string;
-  };
-  personal_growth: {
-    title: string;
-    content: string;
-  };
-  conclusion: string;
-  quote: string;
-}
-
-const projects = ref<Project[]>([]);
-const introContent = ref<IntroContent | null>(null);
-
-const fetchIntroContent = async () => {
-  try {
-    const response = await fetch('/opensource_intro.json');
-    introContent.value = await response.json();
-  } catch (error) {
-    console.error('Error fetching or parsing intro JSON:', error);
-  }
-};
-
-// Helper function to load a script dynamically
-const loadScript = (src: string, callback?: () => void) => {
-  const existingScript = document.querySelector(`script[src="${src}"]`);
-  if (existingScript) {
-    callback?.();
-    return;
-  }
-  const script = document.createElement('script');
-  script.src = src;
-  script.onload = () => {
-    callback?.();
-  };
-  document.head.appendChild(script);
-};
-
-// Simplified project data fetching
-const fetchProjectsData = async () => {
-  try {
-    const response = await fetch('/opensource.json');
-    // We only need the basic project list now
-    projects.value = await response.json();
-  } catch (error) {
-    console.error('Error fetching projects.json:', error);
-  }
-};
-
-onMounted(() => {
-  fetchIntroContent();
-  fetchProjectsData();
-});
+const { siteData } = useSiteData();
+const opensourceData = computed(() => siteData.value?.opensource);
 
 // getLanguageColor is no longer needed
 </script>

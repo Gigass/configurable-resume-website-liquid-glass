@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import { computed } from 'vue';
+import { useSiteData } from '@/stores/sitedata';
+
+const { siteData } = useSiteData();
+const contactData = computed(() => siteData.value?.contact);
 </script>
 
 <template>
@@ -9,20 +14,22 @@
         <feDisplacementMap in="SourceGraphic" in2="turbulence" scale="10" xChannelSelector="R" yChannelSelector="G" />
       </filter>
     </svg>
-    <div class="contact-card-wrapper">
+    <div class="contact-card-wrapper" v-if="contactData">
       <div class="contact-card liquidGlass-wrapper">
         <div class="liquidGlass-effect" style="filter: url(#glass-distortion-contact)"></div>
         <div class="liquidGlass-tint"></div>
         <div class="liquidGlass-shine"></div>
         <div class="liquidGlass-text">
-          <h2>GET IN TOUCH</h2>
+          <h2>{{ contactData.title }}</h2>
           <ul class="contact-list">
-            <li><strong>Phone:</strong><a href="tel:15370145716">15370145716</a></li>
-            <li><strong>WeChat:</strong><span>o1547654938</span></li>
-            <li><strong>Email:</strong><a href="mailto:1547654938@qq.com">1547654938@qq.com</a></li>
+            <li v-for="contact in contactData.contacts" :key="contact.label">
+              <strong>{{ contact.label }}:</strong>
+              <a v-if="contact.type !== 'text'" :href="`${contact.type}:${contact.value}`">{{ contact.value }}</a>
+              <span v-else>{{ contact.value }}</span>
+            </li>
           </ul>
           <div class="contact-social">
-            <a href="mailto:1547654938@qq.com" class="contact-btn">Send Email</a>
+            <a :href="contactData.social.link" class="contact-btn">{{ contactData.social.buttonText }}</a>
           </div>
         </div>
       </div>
