@@ -190,9 +190,11 @@ onUnmounted(() => {
               </p>
             </div>
           </div>
-          <button @click="startIntroduction" class="intro-btn">
-            <img src="@/assets/play-icon.png" alt="Start Introduction" class="play-icon">
-          </button>
+          <div class="intro-btn-container">
+            <button @click="startIntroduction" class="intro-btn">
+              <img src="@/assets/play-icon.png" alt="Start Introduction" class="play-icon">
+            </button>
+          </div>
         </div>
       </transition>
 
@@ -324,22 +326,20 @@ onUnmounted(() => {
 }
 
 .hero-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
+  position: relative; /* Changed from absolute to relative */
   width: 100%;
   height: 100%;
   z-index: 20;
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* Stack hero-container and button vertically */
   justify-content: center;
   align-items: center;
-  gap: 2rem;
-  padding: 2rem;
-  background: radial-gradient(ellipse at center, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 70%);
+  gap: 1.5rem; /* Adjust gap */
+  padding: 1rem;
+  /* background: radial-gradient(ellipse at center, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 70%); */
   
   /* Upgraded to a "Circular Reveal" (Iris Wipe) animation */
-  clip-path: circle(75% at center); /* Start fully visible */
+  clip-path: circle(150% at center); /* Start fully visible */
   /* Faster duration and a more responsive "ease-out" curve */
   transition: clip-path 0.7s cubic-bezier(0.5, 0, 0.2, 1);
 }
@@ -370,11 +370,15 @@ onUnmounted(() => {
   clip-path: circle(0% at center);
 }
 
+.intro-btn-container {
+  flex-shrink: 0; /* Prevent button container from shrinking */
+}
+
 .intro-btn {
   /* 只显示图片，去掉按钮边框和背景 */
   padding: 0;
-  width: 160px; /* 16:9比例，高度为90px */
-  height: 90px;
+  width: 120px; /* smaller button */
+  height: 67.5px; /* maintain 16:9 */
   border: none;
   background: none;
   display: flex;
@@ -427,6 +431,17 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
   position: relative; /* Ensure it's a positioning context for the text-card */
+  opacity: 0;
+  transform: translateY(30px) scale(0.98); /* Start slightly down and smaller for a more subtle effect */
+  pointer-events: none;
+  /* A smoother, more cinematic easing curve with longer duration */
+  transition: opacity 1.4s cubic-bezier(0.86, 0, 0.07, 1), transform 1.4s cubic-bezier(0.86, 0, 0.07, 1);
+}
+
+.carousel-container.is-active {
+  opacity: 1;
+  transform: translateY(0) scale(1); /* End at normal position and size */
+  pointer-events: auto;
 }
 
 .card-swiper {
