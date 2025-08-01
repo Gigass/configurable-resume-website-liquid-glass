@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, watch, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView } from 'vue-router';
+import Background from '@/views/overlay/Background.vue';
 
 const navRef = ref<HTMLElement | null>(null);
 const indicatorStyle = ref({
@@ -79,10 +80,28 @@ watch(() => route.path, () => {
     </filter>
   </svg>
 
-  <RouterView />
+  <RouterView v-slot="{ Component }">
+    <transition name="fade" mode="out-in">
+      <component :is="Component" />
+    </transition>
+  </RouterView>
+
+  <div class="global-background">
+    <Background />
+  </div>
 </template>
 
 <style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
 .header-container {
   position: fixed;
   top: 1.5rem;
@@ -165,5 +184,14 @@ nav a {
 
 nav a:first-of-type {
   border: 0;
+}
+
+.global-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* Place it behind all content */
 }
 </style>

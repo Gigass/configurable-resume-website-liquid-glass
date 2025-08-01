@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import Background from './overlay/Background.vue'
 import { RouterLink } from 'vue-router';
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 
@@ -172,7 +171,6 @@ onUnmounted(() => {
 
 <template>
   <main class="home-view">
-    <Background />
     <!-- SVG filter definition is now moved to App.vue -->
 
     <div class="main-content-area">
@@ -386,11 +384,12 @@ onUnmounted(() => {
   align-items: center;
   cursor: pointer;
   transition: all 0.3s ease;
-  animation: pulse 2.5s infinite cubic-bezier(0.4, 0, 0.6, 1);
+  animation: pulse 2.5s infinite cubic-bezier(0.4, 0, 0.6, 1), bounce-hint 2.5s 1s infinite cubic-bezier(0.4, 0, 0.6, 1);
 }
 
 .intro-btn:hover {
   transform: scale(1.1); /* 只保留放大效果 */
+  animation-play-state: paused; /* 悬停时暂停动画 */
 }
 
 .play-icon {
@@ -419,7 +418,7 @@ onUnmounted(() => {
 }
 
 .hero-container {
-  text-align: center;
+  text-align: left; /* From center to left for a more structured look */
   max-width: 800px;
   border-radius: 2rem;
   font-size: 1.18rem;
@@ -702,29 +701,36 @@ onUnmounted(() => {
 .liquidGlass-text {
   z-index: 3;
   color: #1a1a1a;
-  padding: 2rem;
+  padding: 3.5rem; /* Increased padding for more whitespace */
   width: 100%;
 }
 
 .hero-title {
-  font-size: 4.3rem;
+  font-family: 'Avenir Next', 'Helvetica Neue', Arial, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  font-size: 4rem; /* Slightly adjusted for balance */
   font-weight: 700;
-  color: #000000;
-  margin-bottom: 0.5rem;
+  line-height: 1.2;
+  color: #1a2330; /* A sophisticated dark blue-gray */
+  margin-bottom: 1.5rem; /* Increased spacing */
+  letter-spacing: -0.02em; /* Tighter letter spacing for large titles */
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .hero-subtitle {
-  font-size: 1.7rem;
-  font-weight: 400;
-  color: #333333;
-  margin-bottom: 1.5rem;
+  font-size: 1.5rem; /* Adjusted for hierarchy */
+  font-weight: 500; /* Medium weight for distinction */
+  line-height: 1.4;
+  color: #4a5a6d; /* Softer, elegant gray */
+  margin-bottom: 2rem; /* Increased spacing */
+  letter-spacing: 0.01em;
 }
 
 .hero-description {
-  font-size: 1.18rem;
-  max-width: 600px;
-  color: #333333;
-  margin: 1.5rem auto 0;
+  font-size: 1.1rem;
+  max-width: 100%;
+  color: #3a4a5d;
+  margin: 0; /* Removed auto margin for left alignment */
+  line-height: 1.8; /* Improved for readability */
 }
 
 .card-header {
@@ -852,6 +858,18 @@ onUnmounted(() => {
 @keyframes pulse {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.05); }
+}
+
+@keyframes bounce-hint {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
 }
 
 @keyframes kenBurns {

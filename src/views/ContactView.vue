@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import Background from './overlay/Background.vue'
 </script>
 
 <template>
   <div class="contact-view">
-    <Background />
     <svg width="0" height="0">
       <filter id="glass-distortion-contact">
         <feTurbulence type="fractalNoise" baseFrequency="0.05 0.05" numOctaves="3" result="turbulence" />

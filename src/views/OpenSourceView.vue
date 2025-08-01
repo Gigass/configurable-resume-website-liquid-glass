@@ -9,24 +9,11 @@
         <div class="liquidGlass-shine"></div>
         <div class="liquidGlass-text">
           <div v-if="introContent" class="structured-content">
-            <h1 class="main-title">{{ introContent.title }}</h1>
-            <p class="intro-paragraph">{{ introContent.introduction }}</p>
-            <div class="section principles-section">
-              <h2 class="section-title">{{ introContent.principles.title }}</h2>
-              <p>{{ introContent.principles.description }}</p>
-              <ul>
-                <li v-for="(point, index) in introContent.principles.points" :key="index">{{ point }}</li>
-              </ul>
-            </div>
-            <div class="section community-section">
-              <h2 class="section-title">{{ introContent.community.title }}</h2>
-              <p>{{ introContent.community.content }}</p>
-            </div>
             <div class="section growth-section">
               <h2 class="section-title">{{ introContent.personal_growth.title }}</h2>
               <p>{{ introContent.personal_growth.content }}</p>
             </div>
-            <p class="conclusion-paragraph">{{ introContent.conclusion }}</p>
+
             <hr class="separator">
             <blockquote class="quote">"{{ introContent.quote }}"</blockquote>
           </div>
@@ -148,21 +135,17 @@ onMounted(() => {
   padding-top: 8rem;
   padding-bottom: 4rem;
   width: 100%;
-  background-image: url('../assets/opensourcebk.png');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
 }
 
 .opensource-view::before {
-  /* 此伪元素现在只用于添加一个遮罩层，而不是背景图 */
+  /* This pseudo-element is now only used to add a mask layer, not a background image */
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.1); /* 轻微的暗色遮罩 */
+  background-color: rgba(0, 0, 0, 0.1); /* Slight dark mask */
   z-index: 0;
 }
 
@@ -232,6 +215,13 @@ onMounted(() => {
 @media (min-width: 768px) {
   .projects-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Switch to a 3-column layout on large screens */
+@media (min-width: 1200px) {
+  .projects-grid {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 

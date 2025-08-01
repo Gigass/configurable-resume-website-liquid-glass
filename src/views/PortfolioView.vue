@@ -206,10 +206,6 @@ const vStagger = {
   padding-top: 8rem;
   padding-bottom: 4rem;
   width: 100%;
-  background-image: url('../assets/profilebk.png');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
 }
 
 .portfolio-view::before {
