@@ -256,8 +256,22 @@ onUnmounted(() => {
   justify-content: center;
   flex-grow: 1;
   min-height: 100vh;
-  padding: 1rem;
   position: relative;
+  width: 100%;
+  background-image: url('../assets/bac.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  animation: pan-wallpaper 80s linear infinite alternate;
+}
+
+@keyframes pan-wallpaper {
+  from {
+    background-position-x: 0%;
+  }
+  to {
+    background-position-x: 100%;
+  }
 }
 
 .main-content-area {

@@ -171,28 +171,26 @@ const vStagger = {
 
 <template>
   <div class="portfolio-view">
-    <!-- SVG filter definition is now moved to App.vue -->
-
-    <!-- The title is removed as per the user's request -->
-
-    <div v-for="(group, groupIndex) in projects" :key="groupIndex" class="portfolio-group">
-      <h2 class="company-title">{{ group.company }}</h2>
-      <div class="projects-grid" v-stagger>
-        <!-- Each card is now wrapped in a .card-wrapper for intersection observation -->
-        <div v-for="(project, projectIndex) in group.items" :key="projectIndex" class="card-wrapper" :class="{ 'large-card': project.size === 'large' }">
-          <div class="project-card liquidGlass-wrapper">
-            <!-- Re-injecting the liquid glass effect layers -->
-            <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
-            <div class="liquidGlass-tint"></div>
-            <div class="liquidGlass-shine"></div>
-            <div class="liquidGlass-text">
-              <h3 class="project-title">{{ project.title }}</h3>
-              <p class="project-meta">{{ project.meta }}</p>
-              <ul class="project-description">
-                <li v-for="(desc, i) in project.description" :key="i">{{ desc }}</li>
-              </ul>
-              <div class="project-tags">
-                <span v-for="(tag, i) in project.tags" :key="i" class="tag">{{ tag }}</span>
+    <div class="content-wrapper">
+      <div v-for="(group, groupIndex) in projects" :key="groupIndex" class="portfolio-group">
+        <h2 class="company-title">{{ group.company }}</h2>
+        <div class="projects-grid" v-stagger>
+          <!-- Each card is now wrapped in a .card-wrapper for intersection observation -->
+          <div v-for="(project, projectIndex) in group.items" :key="projectIndex" class="card-wrapper" :class="{ 'large-card': project.size === 'large' }">
+            <div class="project-card liquidGlass-wrapper">
+              <!-- Re-injecting the liquid glass effect layers -->
+              <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
+              <div class="liquidGlass-tint"></div>
+              <div class="liquidGlass-shine"></div>
+              <div class="liquidGlass-text">
+                <h3 class="project-title">{{ project.title }}</h3>
+                <p class="project-meta">{{ project.meta }}</p>
+                <ul class="project-description">
+                  <li v-for="(desc, i) in project.description" :key="i">{{ desc }}</li>
+                </ul>
+                <div class="project-tags">
+                  <span v-for="(tag, i) in project.tags" :key="i" class="tag">{{ tag }}</span>
+                </div>
               </div>
             </div>
           </div>
@@ -205,25 +203,39 @@ const vStagger = {
 <style scoped>
 .portfolio-view {
   min-height: 100vh;
-  padding: 8rem 2rem 4rem 2rem;
-  position: relative; /* Needed for the pseudo-element */
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
-  z-index: 1;
+  padding-top: 8rem;
+  padding-bottom: 4rem;
+  width: 100%;
+  background-image: url('../assets/profilebk.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
 }
 
 .portfolio-view::before {
+  /* 此伪元素现在只用于添加一个遮罩层，而不是背景图 */
   content: '';
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: url('../assets/profilebk.png');
-  background-size: cover;
-  background-position: center;
+  background-color: rgba(0, 0, 0, 0.1);
   z-index: -1;
+}
+
+.content-wrapper {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.portfolio-group {
+  width: 100%; /* 确保组占满 wrapper 宽度 */
 }
 
 .portfolio-title {

@@ -25,7 +25,6 @@ body {
   min-height: 100vh;
   color: var(--color-text);
   background: var(--color-background);
-  background-image: url('/src/assets/bac.png');
   /* 
     'cover'是确保背景无白边的关键。
     它会缩放图片，使其完全覆盖屏幕，即使裁剪掉部分图片也绝不留白。
@@ -40,7 +39,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* 应用平移动画，时长80秒，线性，无限往复 */
-  animation: pan-wallpaper 80s linear infinite alternate;
 }
 
 body::before {
@@ -56,9 +54,8 @@ body::before {
 
 #app {
   width: 100%;
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  /* max-width, margin, and padding are removed from here */
+  /* to allow view components to control their own layout */
 }
 
 a {
