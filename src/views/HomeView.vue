@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Background from './overlay/Background.vue'
 import { RouterLink } from 'vue-router';
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 
@@ -171,6 +172,7 @@ onUnmounted(() => {
 
 <template>
   <main class="home-view">
+    <Background />
     <!-- SVG filter definition is now moved to App.vue -->
 
     <div class="main-content-area">
@@ -250,32 +252,32 @@ onUnmounted(() => {
 
 <style scoped>
 .home-view {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  flex-grow: 1;
   min-height: 100vh;
   position: relative;
   width: 100%;
-  background-image: url('../assets/bac.png');
+  overflow: hidden;
+  /* background-image: url('../assets/bac.png');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-  animation: pan-wallpaper 80s linear infinite alternate;
+  animation: pan-wallpaper 80s linear infinite alternate; */
 }
 
-@keyframes pan-wallpaper {
+/* @keyframes pan-wallpaper {
   from {
     background-position-x: 0%;
   }
   to {
     background-position-x: 100%;
   }
-}
+} */
 
 .main-content-area {
-  position: relative;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
   width: 90vw;
   max-width: 1500px; /* 进一步放大 */
   aspect-ratio: 16/9;

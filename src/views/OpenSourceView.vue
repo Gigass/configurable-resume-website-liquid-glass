@@ -35,51 +35,20 @@
 
       <!-- Projects Grid -->
       <div class="projects-grid">
-        <div v-for="project in projects" :key="project.name" class="github-card liquidGlass-wrapper">
-          <div class="liquidGlass-effect" style="filter: url(#glass-distortion-global)"></div>
+        <div v-for="project in projects" :key="project.name" class="project-card-wrapper liquidGlass-wrapper">
+          <!-- Liquid Glass Layers -->
+          <div class="liquidGlass-effect"></div>
           <div class="liquidGlass-tint"></div>
           <div class="liquidGlass-shine"></div>
-          <div class="liquidGlass-text">
-            <div class="card-header">
-              <a :href="project.url" target="_blank" class="repo-name">
-                <svg class="repo-icon" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-1 1v2h1.75a.75.75 0 110 1.5h-2.5A2.5 2.5 0 012 13.5V2.5zM3.5 1h-1A1.5 1.5 0 001 2.5v11A1.5 1.5 0 002.5 15h11a1.5 1.5 0 001.5-1.5v-11A1.5 1.5 0 0013.5 1h-11zM4 1.75A.25.25 0 014.25 2h7.5a.25.25 0 01.25.25v2.5a.25.25 0 01-.25-.25h-7.5a.25.25 0 01-.25-.25V2z"></path></svg>
-                {{ project.name }}
-              </a>
-            </div>
-            <p class="repo-description">{{ project.repoData ? project.repoData.description : project.description }}</p>
-            <div class="github-stats">
-              <div class="stats-item">
-                <svg class="stats-icon" viewBox="0 0 16 16" version="1.1" width="16" height="16"><path fill-rule="evenodd" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 13.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.192L.646 6.374a.75.75 0 01.416-1.28l4.21-.612L7.327.668A.75.75 0 018 .25z"></path></svg>
-                <span>{{ project.repoData ? project.repoData.stargazers_count : '...' }} Stars</span>
-              </div>
-              <div class="stats-item">
-                <svg class="stats-icon" viewBox="0 0 16 16" version="1.1" width="16" height="16"><path fill-rule="evenodd" d="M5 3.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm0 2.5a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm0 2.5a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm0 2.5a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm1.625-7.5a.75.75 0 100-1.5.75.75 0 000 1.5zM8 4a.75.75 0 100-1.5A.75.75 0 008 4zm2.125.75a.75.75 0 100-1.5.75.75 0 000 1.5zM8 6.5a.75.75 0 100-1.5.75.75 0 000 1.5zm2.125.75a.75.75 0 100-1.5.75.75 0 000 1.5zM8 9a.75.75 0 100-1.5.75.75 0 000 1.5zm2.125.75a.75.75 0 100-1.5.75.75 0 000 1.5zM8 11.5a.75.75 0 100-1.5.75.75 0 000 1.5zm2.125.75a.75.75 0 100-1.5.75.75 0 000 1.5z"></path></svg>
-                <span>{{ project.repoData ? project.repoData.forks_count : '...' }} Forks</span>
-              </div>
-              <div class="stats-item">
-                <svg class="stats-icon" viewBox="0 0 16 16" version="1.1" width="16" height="16"><path fill-rule="evenodd" d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8zm9 3a1 1 0 11-2 0 1 1 0 012 0zm-.25-6.25a.75.75 0 00-1.5 0v3.5a.75.75 0 001.5 0v-3.5z"></path></svg>
-                <span>{{ project.repoData ? project.repoData.open_issues_count : '...' }} Issues</span>
-              </div>
-            </div>
-            <div v-if="project.repoData && project.repoData.language" class="language-section">
-              <div class="language-item">
-                <span class="language-color" :style="{ backgroundColor: getLanguageColor(project.repoData.language) }"></span>
-                <span>{{ project.repoData.language }}</span>
-              </div>
-            </div>
-            <div v-if="project.contributors && project.contributors.length" class="contributors-section">
-              <h4 class="section-title">主要贡献者</h4>
-              <div class="contributors-list">
-                <a v-for="contributor in project.contributors.slice(0, 5)" :key="contributor.id" :href="contributor.html_url" target="_blank" class="contributor-link">
-                  <img :src="contributor.avatar_url" :alt="contributor.login" class="contributor-avatar" :title="`${contributor.login} - ${contributor.contributions} 次提交`">
-                </a>
-              </div>
-            </div>
-            <a :href="project.url" target="_blank" class="view-github-btn">
-              <svg class="github-icon" viewBox="0 0 16 16" version="1.1" width="16" height="16"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
-              在 GitHub 上查看
-            </a>
-          </div>
+          
+          <!-- GitHub Readme Stats Card -->
+          <a :href="project.url" target="_blank" class="card-link">
+            <img 
+              class="github-stats-card"
+              :src="`https://github-readme-stats.vercel.app/api/pin/?username=${project.repo.split('/')[0]}&repo=${project.repo.split('/')[1]}&theme=dark&bg_color=00000000&border_radius=15&hide_border=true&title_color=000000&text_color=333333&icon_color=00cc66`"
+              :alt="project.name"
+            />
+          </a>
         </div>
       </div>
 
@@ -98,23 +67,13 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 
-// Define a type interface for our project structure
-interface Contributor {
-  id: number;
-  login: string;
-  avatar_url: string;
-  html_url: string;
-  contributions: number; // Added contributions for contributor list
-}
-
-interface RepoData {
-  language: string;
-  html_url: string;
-  stargazers_count: number;
-  forks_count: number;
+// Interfaces can be simplified as we fetch less data manually
+interface Project {
+  name: string;
+  repo: string;
+  url: string;
   description: string;
-  open_issues_count: number;
-  updated_at: string;
+  // repoData and contributors are no longer needed
 }
 
 interface IntroContent {
@@ -137,17 +96,6 @@ interface IntroContent {
   quote: string;
 }
 
-interface Project {
-  name: string;
-  repo: string;
-  url: string;
-  description: string;
-  repoData: RepoData | null;
-  contributors: Contributor[] | null;
-  loading: boolean;
-  error: string | null;
-}
-
 const projects = ref<Project[]>([]);
 const introContent = ref<IntroContent | null>(null);
 
@@ -160,53 +108,27 @@ const fetchIntroContent = async () => {
   }
 };
 
+// Helper function to load a script dynamically
+const loadScript = (src: string, callback?: () => void) => {
+  const existingScript = document.querySelector(`script[src="${src}"]`);
+  if (existingScript) {
+    callback?.();
+    return;
+  }
+  const script = document.createElement('script');
+  script.src = src;
+  script.onload = () => {
+    callback?.();
+  };
+  document.head.appendChild(script);
+};
+
+// Simplified project data fetching
 const fetchProjectsData = async () => {
   try {
-    // 1. Fetch the list of projects from the local JSON file
     const response = await fetch('/opensource.json');
-    const projectList = await response.json();
-
-    // Initialize projects ref with basic data and repoData as null
-    projects.value = projectList.map((p: any) => ({
-      ...p,
-      repoData: null,
-      contributors: null,
-      loading: true,
-      error: null
-    }));
-
-    // 2. Fetch detailed data for each project from GitHub API
-    projects.value.forEach(async (project, index) => {
-      try {
-        // Fetch repo data
-        const repoResponse = await fetch(`https://api.github.com/repos/${project.repo}`);
-        if (repoResponse.ok) {
-          project.repoData = await repoResponse.json();
-        } else {
-          console.error(`Failed to fetch GitHub repo data for ${project.repo}:`, repoResponse.status);
-          project.error = `无法加载仓库数据 (${repoResponse.status})`;
-        }
-
-        // Fetch contributors data
-        try {
-          const contributorsResponse = await fetch(`https://api.github.com/repos/${project.repo}/contributors`);
-          if (contributorsResponse.ok) {
-            project.contributors = await contributorsResponse.json();
-          } else {
-            console.error(`Failed to fetch contributors for ${project.repo}:`, contributorsResponse.status);
-          }
-        } catch (error) {
-          console.error(`Error fetching contributors for ${project.repo}:`, error);
-        }
-
-        // Mark loading as complete
-        project.loading = false;
-      } catch (error) {
-        console.error(`Error fetching GitHub data for ${project.repo}:`, error);
-        project.error = '加载数据时发生错误';
-        project.loading = false;
-      }
-    });
+    // We only need the basic project list now
+    projects.value = await response.json();
   } catch (error) {
     console.error('Error fetching projects.json:', error);
   }
@@ -217,17 +139,7 @@ onMounted(() => {
   fetchProjectsData();
 });
 
-const getLanguageColor = (language: string): string => {
-  const colors: { [key: string]: string } = {
-    'Java': '#b07219',
-    'JavaScript': '#f1e05a',
-    'TypeScript': '#2b7489',
-    'HTML': '#e34c26',
-    'CSS': '#563d7c',
-    'Vue': '#41b883',
-  };
-  return colors[language] || '#c_gray';
-};
+// getLanguageColor is no longer needed
 </script>
 
 <style scoped>
@@ -310,156 +222,123 @@ const getLanguageColor = (language: string): string => {
 
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 2rem;
+  /* Default to a single column for mobile-first approach */
+  grid-template-columns: 1fr;
+  gap: 2.5rem; /* Increased gap for better spacing with larger cards */
   width: 100%;
-  max-width: 1200px;
-  margin-bottom: 3rem;
 }
-.github-card {
-  /* Remove direct background and border, as liquidGlass-wrapper will handle it */
-  border-radius: 15px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  animation: popIn 1s ease-in-out backwards;
-  /* Add overflow hidden for the glass effect */
-  overflow: hidden;
+
+/* Switch to a 2-column layout on medium screens and up */
+@media (min-width: 768px) {
+  .projects-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.project-card-wrapper {
   position: relative;
-  background-color: rgba(255, 255, 255, 0.15);
-  padding: 0;
-  margin-bottom: 1rem;
-}
-
-.github-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.16), 0 6px 20px rgba(0, 0, 0, 0.12);
-}
-
-.card-header {
-  display: flex;
+  border-radius: 15px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  padding: 1rem; /* Add padding to the wrapper */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  display: flex; /* Use flexbox to center the card */
   align-items: center;
-  margin-bottom: 1rem;
+  justify-content: center;
 }
 
-.repo-icon {
-  fill: #586069;
-  margin-right: 0.5rem;
-  vertical-align: middle;
+.project-card-wrapper:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
 }
 
-.repo-name {
-  color: #1a2330; /* Darker color for readability on glass */
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
-  font-size: 1.5rem;
+.card-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 2; /* Place the link above the glass effect */
+}
+
+.github-stats-card {
+  width: 100%;
+  height: auto; /* Allow height to be determined by content */
+  display: block;
+}
+
+.repo-header a {
+  font-size: 1.4rem;
   font-weight: 700;
+  color: #ffffff;
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
-.repo-name:hover {
-  text-decoration: underline;
-  color: #0366d6;
+.repo-header a:hover {
+  color: #ffb366;
 }
 
 .repo-description {
-  color: #2a3a4d;
-  font-size: 1rem;
-  margin-bottom: 1.5rem;
-  line-height: 1.5;
-  font-weight: 500;
+  font-size: 0.95rem;
+  margin: 0.75rem 0;
+  flex-grow: 1; /* Allow description to take up available space */
+  line-height: 1.6;
+  color: #c0c0c0;
 }
 
-.github-stats {
+.repo-stats {
   display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  align-items: center;
+  gap: 1.5rem;
   font-size: 0.9rem;
-  color: #3a4a5d;
-  font-weight: 500;
+  color: #a0a0a0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 0.75rem;
 }
 
-.stats-item {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  background-color: rgba(255, 255, 255, 0.2);
-  padding: 0.3rem 0.6rem;
-  border-radius: 12px;
-  transition: all 0.3s ease;
-}
-
-.stats-item:hover {
-  background-color: rgba(255, 255, 255, 0.3);
-  transform: translateY(-2px);
-}
-
-.stats-icon {
-  fill: currentColor;
-}
-
-.language-section {
-  margin-top: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.language-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background-color: rgba(255, 255, 255, 0.2);
-  padding: 0.3rem 0.8rem;
-  border-radius: 12px;
-  display: inline-flex;
-}
-
-.language-color {
+.repo-language .language-color {
+  display: inline-block;
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  border: 1px solid rgba(0,0,0,0.1);
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
+.stat-item {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.stat-item:hover {
+  color: #ffb366;
 }
 
 .contributors-section {
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
-  padding-top: 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.section-title {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #3a4a5d;
-  margin-bottom: 0.8rem;
+  position: absolute;
+  bottom: 1rem;
+  right: 1.5rem;
 }
 
 .contributors-list {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.contributor-link {
-  text-decoration: none;
-  color: inherit;
-  position: relative;
+  justify-content: flex-end;
 }
 
 .contributor-avatar {
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  border: 2px solid #fff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  margin-left: -10px; /* Create the overlapping effect */
+  transition: all 0.3s ease;
 }
 
 .contributor-avatar:hover {
-  transform: scale(1.1);
+  transform: translateY(-3px) scale(1.1);
+  border-color: #fff;
+  z-index: 10;
 }
 
 .view-github-btn {
