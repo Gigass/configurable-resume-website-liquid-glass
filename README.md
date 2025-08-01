@@ -55,13 +55,17 @@ npm run dev
 
 ## 🖼️ 项目预览
 
-| 沉浸式首页 (Home) | 项目作品集 (Project) |
-| :---: | :---: |
-| ![首页预览](public/screenshots/SCR-home.png) | ![项目页预览](public/screenshots/SCR-project.png) |
+#### 沉浸式首页 (Home)
+![首页预览](public/screenshots/SCR-home.png)
 
-| 开源项目 (Open Source) | 动态交互细节 |
-| :---: | :---: |
-| ![开源项目页预览](public/screenshots/SCR-opensource.png) | ![首页细节](public/screenshots/SCR-home2.png) |
+#### 项目作品集 (Project)
+![项目页预览](public/screenshots/SCR-project.png)
+
+#### 开源项目 (Open Source)
+![开源项目页预览](public/screenshots/SCR-opensource.png)
+
+#### 动态交互细节
+![首页细节](public/screenshots/SCR-home2.png)
 
 ---
 
