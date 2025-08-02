@@ -10,7 +10,7 @@
 
 ### 第一步：下载预构建包
 
-1.  访问本项目的 [GitHub Releases 页面](https://github.com/your-username/mywebsite/releases) (请将 `your-username/mywebsite` 替换为您的实际仓库地址)。
+1.  访问本项目的 [GitHub Releases 页面](https://github.com/Gigass/configurable-resume-website-liquid-glass) (请将 `your-username/mywebsite` 替换为您的实际仓库地址)。
 2.  下载最新版本 (V1.0 或更高) 下的 `dist.zip` 文件。
 3.  在您的电脑上解压这个 `dist.zip` 文件，您会得到一个名为 `dist` 的文件夹。
 
