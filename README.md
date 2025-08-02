@@ -1,103 +1,79 @@
-# 动态交互式个人简历网站模板
+# My Responsive Portfolio Website
 
-## 🚀 快速上手：使用AI一键生成您的网站
+This is a modern, fully responsive portfolio website built with Vue 3, Vite, and TypeScript. It features a unique "liquid glass" UI effect and is designed to provide an excellent viewing experience on both desktop and mobile devices.
 
-本项目支持使用AI智能体，将您的简历信息一键转换为网站所需的JSON配置文件，极大简化了配置过程。
+## Core Features
 
-### 第一步：访问AI智能体并生成配置
+- **Fully Responsive**: Adapts seamlessly to various screen sizes, from large desktop monitors to mobile phones.
+- **Liquid Glass UI**: A unique and visually appealing user interface with a frosted glass effect.
+- **Dynamic Content**: Site data is loaded from a `sitedata.json` file, making it easy to update project information, skills, and contact details.
+- **Interactive Experience**: Features smooth page transitions, animated carousels, and interactive project cards.
+- **Modern Tech Stack**: Built with the latest web technologies including Vue 3 (Composition API), Vite, and TypeScript.
 
-1.  **访问链接**: [点击这里访问简历信息生成器 (AI Agent)](https://www.coze.cn/store/agent/7533541654746546211?bot_id=true)
-2.  **上传简历**: 按照智能体的提示，上传您的简历文件（如 .pdf, .docx, .md 等格式）。
-3.  **获取JSON**: 智能体将自动分析您的简历，并生成完整的 `sitedata.json` 内容。请复制所有生成的代码。
+## Project Structure
 
-### 第二步：将配置粘贴到项目中
+The project is organized logically to separate concerns:
 
-1.  在本项目中，找到并打开文件：`public/data/sitedata.json`。
-2.  将您从AI智能体复制的全部内容，粘贴并覆盖到这个文件中。
+- `src/views`: Contains the main page components (`HomeView`, `PortfolioView`, etc.).
+- `src/components`: For reusable smaller components.
+- `src/stores`: Manages global state, such as site data, using a simple `ref`-based store.
+- `src/assets`: Holds all static assets like CSS, images, and fonts.
+- `public/data`: Contains the `sitedata.json` file for easy content management.
 
-### 第三步：启动您的网站！
+## Screenshots
 
-打开终端，运行以下命令：
+Here are some previews of the desktop version:
 
-```bash
-# 安装项目依赖
-npm install
+| Home Page | Open Source Projects |
+| :---: | :---: |
+| ![Home Page Screenshot 1](public/screenshots/SCR-home.png) | ![Open Source Projects Screenshot](public/screenshots/SCR-opensource.png) |
 
-# 启动本地开发服务器
+| Project Showcase | Full-Screen Carousel |
+| :---: | :---: |
+| ![Project Showcase Screenshot](public/screenshots/SCR-project.png) | ![Home Page Screenshot 2](public/screenshots/SCR-home2.png) |
+
+
+## Project Setup
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (version 18.x or higher recommended)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+
+### Installation
+
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/your-username/mywebsite.git
+   ```
+2. Navigate to the project directory:
+   ```sh
+   cd mywebsite
+   ```
+3. Install dependencies:
+   ```sh
+   npm install
+   ```
+
+### Development Server
+
+To run the development server with hot-reloading:
+```sh
 npm run dev
 ```
-现在，在浏览器中打开显示的本地地址（通常是 `http://localhost:5173`），您就可以看到为您量身定制的个人网站了！
+The application will be available at `http://localhost:5173`.
 
----
+### Build for Production
 
-## 📖 手动配置指南
-
-如果您想更深入地了解数据结构或进行精细调整，可以参考以下手动配置方法。
-
-### 核心数据文件
-
-您网站的所有内容都由一个文件统一管理：**`/public/data/sitedata.json`**
-
-您可以直接编辑此文件来更新网站内容。强烈建议使用AI工具生成初始版本后再进行微调。
-
----
-
-## ✨ 核心亮点
-
-- **AI驱动配置**: 通过专属智能体，从简历一键生成网站配置，实现零手动配置。
-- **数据驱动**: 整个网站的内容完全由 `sitedata.json` 文件驱动，实现了内容与视图的彻底分离。
-- **沉浸式首页体验**: 液态玻璃美学、故事化卡片轮播、Ken Burns 特效等。
-- **高级项目作品集展示**: 动态响应式网格、3D悬停交互、高性能入场动画。
-- **GitHub API 集成**: 自动生成美观的 GitHub 仓库统计卡片。
-- **统一且精致的视觉语言**: 以液态玻璃为核心设计语言，色彩与渐变运用得当，完美适配多端设备。
-
----
-
-## 🖼️ 项目预览
-
-#### 沉浸式首页 (Home)
-![首页预览](public/screenshots/SCR-home.png)
-
-#### 项目作品集 (Project)
-![项目页预览](public/screenshots/SCR-project.png)
-
-#### 开源项目 (Open Source)
-![开源项目页预览](public/screenshots/SCR-opensource.png)
-
-#### 动态交互细节
-![首页细节](public/screenshots/SCR-home2.png)
-
----
-
-## 🛠️ 技术栈
-
-| 类别         | 技术/库                                       |
-|--------------|-----------------------------------------------|
-| **核心框架** | `vue` (v3), `vue-router`, `pinia`             |
-| **构建工具** | `vite`                                        |
-| **语言**     | `typescript`                                  |
-| **动画库**   | `gsap`, `@vueuse/motion`, `animejs`           |
-| **3D渲染**   | `three`, `@tresjs/core`, `@tresjs/cientos`    |
-| **轮播**     | `swiper`                                      |
-| **物理引擎** | `matter-js`                                   |
-
----
-
-## 📁 项目结构
-
+To compile and minify the application for production:
+```sh
+npm run build
 ```
-my-website/
-├── public/
-│   ├── data/
-│   │   └── sitedata.json       # 唯一的网站数据源
-│   └── ...                     # 其他静态资源
-├── src/
-│   ├── stores/
-│   │   └── sitedata.ts         # 数据获取与管理逻辑
-│   ├── views/                  # 页面组件
-│   ├── App.vue                 # 应用根组件
-│   └── main.ts                 # 应用入口文件
-├── index.html
-├── package.json
-└── README.md                   # 就是您正在看的这个文件
+The output files will be in the `dist/` directory.
+
+### Linting
+
+To lint and format the code:
+```sh
+npm run lint
 ```
