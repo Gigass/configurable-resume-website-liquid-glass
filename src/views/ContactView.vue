@@ -174,4 +174,35 @@ const contactData = computed(() => siteData.value?.contact);
   background: #0070e0;
   transform: translateY(-3px) scale(1.05); /* 悬停时效果更明显 */
 }
+
+@media (max-width: 768px) {
+  .contact-card-wrapper {
+    padding: 6rem 1rem 1rem;
+    align-items: flex-start;
+  }
+
+  .contact-card {
+    max-width: 100%;
+  }
+
+  .liquidGlass-text {
+    padding: 1.5rem;
+  }
+
+  .contact-card h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .contact-list li {
+    font-size: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .contact-list a, .contact-list span {
+    font-size: 0.9rem;
+  }
+}
 </style> 

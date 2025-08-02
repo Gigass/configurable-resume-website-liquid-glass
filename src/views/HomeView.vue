@@ -28,7 +28,7 @@ interface Advantage {
   details: string[];
 }
 
-const { siteData } = useSiteData();
+const { siteData, isLoaded } = useSiteData();
 
 const homeData = computed(() => siteData.value?.home);
 
@@ -144,7 +144,7 @@ onUnmounted(() => {
       </transition>
 
       <!-- 卡片式轮播图 -->
-      <div class="carousel-container" :class="{ 'is-active': introductionStarted }">
+      <div v-if="isLoaded" class="carousel-container" :class="{ 'is-active': introductionStarted }">
         <swiper
           :modules="[Navigation, Autoplay, EffectFade]"
           :slides-per-view="1"
@@ -308,6 +308,7 @@ onUnmounted(() => {
 
 .intro-btn-container {
   flex-shrink: 0; /* Prevent button container from shrinking */
+  margin-top: 2rem; /* Move button down */
 }
 
 .intro-btn {
@@ -755,29 +756,101 @@ onUnmounted(() => {
 
 /* 响应式设计 */
 @media (max-width: 768px) {
+  .main-content-area {
+    width: 100%;
+    height: auto;
+    max-height: none;
+    aspect-ratio: unset;
+    position: relative;
+    transform: none;
+    left: auto;
+    top: auto;
+    padding: 6rem 1rem 2rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero-overlay {
+    height: auto; /* Allow height to be based on content */
+  }
+
   .carousel-container {
-    max-width: 95%;
+    max-width: 100%;
+    position: relative;
+    opacity: 1; /* Ensure it's visible by default on mobile */
+    transform: none;
+    pointer-events: auto;
+    height: auto; /* Allow height to be based on content */
+  }
+
+  .card-swiper {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9; /* Give swiper an aspect ratio on mobile */
+    border-radius: 1rem; /* Smaller radius */
+  }
+
+  .slide-card {
+    border-radius: 1rem;
   }
   
-  .text-card {
-    width: 60%;
-    right: 1rem;
+  .text-card, .text-card.liquidGlass-wrapper {
+    width: 100%;
+    right: auto;
+    position: relative;
+    bottom: auto;
+    left: auto;
+    margin-top: 1.5rem;
+    border-radius: 1rem;
+    height: auto;
+    max-height: none;
+    min-height: auto;
+    clip-path: none;
+    pointer-events: auto;
+    transform: none !important; /* Override hover transform */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
   }
   
   .text-card.expanded {
-    min-height: 250px;
+    min-height: auto;
   }
   
+  .hero-container {
+    padding: 2rem;
+  }
+
   .hero-title {
-    font-size: 3rem;
+    font-size: 2.5rem;
   }
 
   .hero-subtitle {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
   }
   
+  .hero-description {
+    font-size: 1rem;
+  }
+
   .liquidGlass-text {
     padding: 1.5rem;
+  }
+
+  .reset-btn {
+    top: 1rem;
+    right: 1rem;
+    width: 40px;
+    height: 40px;
+  }
+
+  .text-card.expanded:hover {
+      transform: none !important;
+  }
+
+  /* Make text card content visible by default on mobile */
+  .text-card .adv-details li,
+  .text-card .adv-divider {
+    opacity: 1;
+    transform: none;
   }
 }
 

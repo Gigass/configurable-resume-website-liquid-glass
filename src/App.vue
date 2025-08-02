@@ -195,4 +195,26 @@ nav a:first-of-type {
   height: 100%;
   z-index: -1; /* Place it behind all content */
 }
+
+@media (max-width: 768px) {
+  .header-container {
+    top: 1rem;
+    width: 98%; /* 增加宽度 */
+  }
+
+  header {
+    padding: 0.5rem 0.5rem; /* 减少内边距，使其更紧凑 */
+  }
+
+  nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%; /* 确保 nav 撑满 header */
+  }
+
+  nav a {
+    font-size: 0.9rem; /* 减小字体 */
+    padding: 0.4rem 0.6rem; /* 调整内边距以适应更小的字体和空间 */
+  }
+}
 </style>

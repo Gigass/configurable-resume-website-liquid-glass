@@ -109,13 +109,15 @@ export interface SiteData {
 }
 
 const siteData = ref<SiteData | null>(null);
+const isLoaded = ref(false);
 
 export function useSiteData() {
-  if (!siteData.value) {
+  if (!siteData.value && !isLoaded.value) { // Prevent re-fetching
     fetch('/data/sitedata.json')
       .then(response => response.json())
       .then(data => {
         siteData.value = data;
+        isLoaded.value = true; // Set loaded flag to true
       })
       .catch(error => {
         console.error('Error fetching site data:', error);
@@ -123,6 +125,7 @@ export function useSiteData() {
   }
   
   return {
-    siteData
+    siteData,
+    isLoaded // Expose the loaded state
   };
 } 

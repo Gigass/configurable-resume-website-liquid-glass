@@ -331,4 +331,45 @@ const vStagger = {
 .tag:hover::before {
   left: 100%;
 }
+
+@media (max-width: 768px) {
+  .portfolio-view {
+    padding-top: 6rem;
+    padding-bottom: 2rem;
+  }
+  .content-wrapper {
+    padding: 0 1rem;
+    gap: 2rem;
+  }
+  .company-title {
+    font-size: 1.5rem;
+    padding: 0.8rem 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .project-card {
+    border-radius: 1rem;
+  }
+  .project-card:hover {
+    transform: none;
+  }
+  .liquidGlass-text {
+    padding: 1.5rem;
+  }
+  .project-title {
+    font-size: 1.3rem;
+  }
+  .large-card .project-title {
+    font-size: 1.6rem;
+  }
+  .project-description li {
+    font-size: 0.95rem;
+  }
+  .large-card .project-description li {
+    font-size: 1rem;
+  }
+}
 </style> 

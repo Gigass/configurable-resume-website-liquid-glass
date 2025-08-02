@@ -467,4 +467,30 @@ const opensourceData = computed(() => siteData.value?.opensource);
   margin: 2rem auto 0;
   max-width: 80%;
 }
+
+@media (max-width: 768px) {
+  .opensource-view {
+    padding-top: 6rem;
+    padding-bottom: 2rem;
+  }
+  .content-wrapper {
+    padding: 0 1rem;
+    gap: 2rem;
+  }
+  .intro-container {
+    margin-bottom: 2rem;
+  }
+  .liquidGlass-text {
+    padding: 1.5rem;
+  }
+  .section-title {
+    font-size: 1.5rem;
+  }
+  .projects-grid {
+    gap: 1.5rem;
+  }
+  .project-card-wrapper:hover {
+    transform: none;
+  }
+}
 </style> 

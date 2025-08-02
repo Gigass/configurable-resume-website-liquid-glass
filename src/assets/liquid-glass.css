@@ -1,6 +1,7 @@
 .liquidGlass-wrapper {
   position: relative;
   display: flex;
+  justify-content: center;
   font-weight: 600;
   overflow: hidden;
   color: black;
