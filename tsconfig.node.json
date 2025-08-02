@@ -1,14 +1,14 @@
 {
   "extends": "@tsconfig/node22/tsconfig.json",
   "include": [
-    "vite.config.*",
-    "vitest.config.*",
-    "cypress.config.*",
-    "nightwatch.conf.*",
-    "playwright.config.*",
-    "eslint.config.*"
+    "vite.config.ts",
+    "vitest.config.ts",
+    "cypress.config.ts",
+    "playwright.config.ts"
   ],
   "compilerOptions": {
+    "composite": true,
+    "incremental": true,
     "noEmit": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
 
