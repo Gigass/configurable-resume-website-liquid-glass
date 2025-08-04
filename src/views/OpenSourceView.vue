@@ -30,11 +30,26 @@
           
           <!-- GitHub Readme Stats Card -->
           <a :href="project.url" target="_blank" class="card-link">
-            <img 
-              class="github-stats-card"
-              :src="`https://github-readme-stats.vercel.app/api/pin/?username=${project.repo.split('/')[0]}&repo=${project.repo.split('/')[1]}&theme=${opensourceData.githubStatsCard.theme}&bg_color=${opensourceData.githubStatsCard.bg_color}&border_radius=${opensourceData.githubStatsCard.border_radius}&hide_border=${opensourceData.githubStatsCard.hide_border}&title_color=${opensourceData.githubStatsCard.title_color}&text_color=${opensourceData.githubStatsCard.text_color}&icon_color=${opensourceData.githubStatsCard.icon_color}`"
-              :alt="project.name"
-            />
+            <div class="project-card-content">
+              <img 
+                class="github-stats-card"
+                :src="`https://github-readme-stats.vercel.app/api/pin/?username=${project.repo.split('/')[0]}&repo=${project.repo.split('/')[1]}&theme=${opensourceData.githubStatsCard.theme}&bg_color=${opensourceData.githubStatsCard.bg_color}&border_radius=${opensourceData.githubStatsCard.border_radius}&hide_border=${opensourceData.githubStatsCard.hide_border}&title_color=${opensourceData.githubStatsCard.title_color}&text_color=${opensourceData.githubStatsCard.text_color}&icon_color=${opensourceData.githubStatsCard.icon_color}`"
+                :alt="project.name"
+                @error="handleImageError"
+                @load="handleImageLoad"
+              />
+              <!-- Fallback content when image fails to load -->
+              <div class="fallback-card" v-if="imageErrors[project.name]">
+                <div class="fallback-header">
+                  <h3 class="fallback-title">{{ project.name }}</h3>
+                  <div class="fallback-repo">{{ project.repo }}</div>
+                </div>
+                <p class="fallback-description">{{ project.description }}</p>
+                <div class="fallback-footer">
+                  <span class="github-link-text">查看在GitHub →</span>
+                </div>
+              </div>
+            </div>
           </a>
         </div>
       </div>
@@ -52,13 +67,26 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useSiteData } from '@/stores/sitedata';
 
 const { siteData } = useSiteData();
 const opensourceData = computed(() => siteData.value?.opensource);
 
-// getLanguageColor is no longer needed
+// Track image loading errors
+const imageErrors = ref<Record<string, boolean>>({});
+
+const handleImageError = (event: Event) => {
+  const img = event.target as HTMLImageElement;
+  const projectName = img.alt;
+  imageErrors.value[projectName] = true;
+};
+
+const handleImageLoad = (event: Event) => {
+  const img = event.target as HTMLImageElement;
+  const projectName = img.alt;
+  imageErrors.value[projectName] = false;
+};
 </script>
 
 <style scoped>
@@ -182,10 +210,71 @@ const opensourceData = computed(() => siteData.value?.opensource);
   z-index: 2; /* Place the link above the glass effect */
 }
 
+.project-card-content {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
 .github-stats-card {
   width: 100%;
   height: auto; /* Allow height to be determined by content */
   display: block;
+  min-height: 120px; /* Ensure minimum height */
+}
+
+.fallback-card {
+  width: 100%;
+  height: 120px;
+  background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+  border-radius: 8px;
+  padding: 16px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.fallback-header {
+  margin-bottom: 8px;
+}
+
+.fallback-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  color: #58a6ff;
+}
+
+.fallback-repo {
+  font-size: 12px;
+  color: #8b949e;
+  margin: 0;
+}
+
+.fallback-description {
+  font-size: 14px;
+  color: #e6edf3;
+  line-height: 1.4;
+  margin: 8px 0;
+  flex-grow: 1;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.fallback-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.github-link-text {
+  font-size: 12px;
+  color: #58a6ff;
+  font-weight: 500;
 }
 
 .repo-header a {
@@ -472,10 +561,12 @@ const opensourceData = computed(() => siteData.value?.opensource);
   .opensource-view {
     padding-top: 6rem;
     padding-bottom: 2rem;
+    min-height: auto; /* Allow content to determine height */
   }
   .content-wrapper {
     padding: 0 1rem;
     gap: 2rem;
+    min-height: auto; /* Allow content to determine height */
   }
   .intro-container {
     margin-bottom: 2rem;
@@ -488,9 +579,26 @@ const opensourceData = computed(() => siteData.value?.opensource);
   }
   .projects-grid {
     gap: 1.5rem;
+    min-height: auto; /* Allow content to determine height */
+    /* Ensure grid items have enough space */
+    grid-auto-rows: auto;
+  }
+  .project-card-wrapper {
+    min-height: 200px; /* Ensure minimum height for project cards */
+    height: auto; /* Allow height to expand with content */
   }
   .project-card-wrapper:hover {
     transform: none;
+  }
+  .github-stats-card {
+    max-width: 100%;
+    height: auto;
+    min-height: 150px; /* Ensure cards are visible */
+  }
+  /* Ensure the more-projects section is visible */
+  .more-projects {
+    margin-top: 2rem;
+    padding-bottom: 2rem;
   }
 }
 </style> 

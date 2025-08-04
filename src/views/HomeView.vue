@@ -223,10 +223,10 @@ onUnmounted(() => {
 }
 
 .reset-btn {
-  position: absolute;
+  position: fixed; /* Change to fixed positioning */
   top: 1.5rem;
   right: 1.5rem;
-  z-index: 30; /* 确保在最上层 */
+  z-index: 150; /* Higher than navigation z-index (100) */
   width: 44px;
   height: 44px;
   background-color: rgba(0, 0, 0, 0.2);
@@ -373,13 +373,21 @@ onUnmounted(() => {
   transform: translateY(30px) scale(0.98); /* Start slightly down and smaller for a more subtle effect */
   pointer-events: none;
   /* A smoother, more cinematic easing curve with longer duration */
-  transition: opacity 1.4s cubic-bezier(0.86, 0, 0.07, 1), transform 1.4s cubic-bezier(0.86, 0, 0.07, 1);
+  transition: opacity 1.4s cubic-bezier(0.86, 0, 0.07, 1), transform 1.4s cubic-bezier(0.86, 0, 0.07, 1), height 1.4s cubic-bezier(0.86, 0, 0.07, 1);
+  overflow: hidden; /* Prevent content from overflowing */
+  border-radius: 2rem; /* Match the swiper border radius */
+  /* Initially hidden with no height */
+  height: 0;
+  max-height: 0;
 }
 
 .carousel-container.is-active {
   opacity: 1;
   transform: translateY(0) scale(1); /* End at normal position and size */
   pointer-events: auto;
+  /* Restore full height when active */
+  height: 100%;
+  max-height: none;
 }
 
 .card-swiper {
@@ -746,6 +754,7 @@ onUnmounted(() => {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   color: #fff;
   transition: all 0.3s ease;
+  z-index: 20; /* Higher than text-card z-index */
 }
 
 :deep(.swiper-button-prev):hover,
@@ -777,17 +786,23 @@ onUnmounted(() => {
   .carousel-container {
     max-width: 100%;
     position: relative;
-    opacity: 1; /* Ensure it's visible by default on mobile */
-    transform: none;
-    pointer-events: auto;
-    height: auto; /* Allow height to be based on content */
+    /* Keep the height control for mobile too */
+    height: 0;
+    max-height: 0;
+    transition: height 1.4s cubic-bezier(0.86, 0, 0.07, 1), max-height 1.4s cubic-bezier(0.86, 0, 0.07, 1);
+  }
+  
+  .carousel-container.is-active {
+    height: auto; /* Allow height to be based on content when active */
+    max-height: none;
   }
 
   .card-swiper {
     width: 100%;
-    height: auto;
-    aspect-ratio: 16 / 9; /* Give swiper an aspect ratio on mobile */
+    height: 250px; /* Fixed height for mobile to ensure consistent layout */
+    aspect-ratio: unset; /* Remove aspect ratio to use fixed height */
     border-radius: 1rem; /* Smaller radius */
+    position: relative; /* Ensure it's a positioning context for the reset button */
   }
 
   .slide-card {
@@ -797,18 +812,19 @@ onUnmounted(() => {
   .text-card, .text-card.liquidGlass-wrapper {
     width: 100%;
     right: auto;
-    position: relative;
+    position: relative; /* Change back to relative for mobile */
     bottom: auto;
     left: auto;
-    margin-top: 1.5rem;
-    border-radius: 1rem;
+    margin-top: 1.5rem; /* Add margin to separate from swiper */
+    border-radius: 1rem; /* Full rounded corners for mobile */
     height: auto;
     max-height: none;
     min-height: auto;
-    clip-path: none;
-    pointer-events: auto;
     transform: none !important; /* Override hover transform */
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    clip-path: none; /* Remove clip-path for mobile */
+    pointer-events: auto; /* Always allow interaction on mobile */
+    opacity: 1; /* Always visible on mobile */
   }
   
   .text-card.expanded {
@@ -836,21 +852,28 @@ onUnmounted(() => {
   }
 
   .reset-btn {
-    top: 1rem;
-    right: 1rem;
+    position: absolute; /* Change to absolute positioning for mobile */
+    top: 7rem; /* Position it to align with carousel top + padding */
+    right: 2rem; /* Add some margin from screen edge */
     width: 40px;
     height: 40px;
+    z-index: 25; /* Ensure it's above swiper content */
   }
 
   .text-card.expanded:hover {
       transform: none !important;
   }
 
-  /* Make text card content visible by default on mobile */
+  /* Make all content visible by default on mobile */
   .text-card .adv-details li,
   .text-card .adv-divider {
-    opacity: 1;
-    transform: none;
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none;
+  }
+  
+  .text-card .adv-divider {
+    transform: scaleX(1) !important;
   }
 }
 
