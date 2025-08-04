@@ -38,7 +38,35 @@
                   <div class="project-repo">{{ project.repo }}</div>
                 </div>
               </div>
-              <p class="project-description">{{ project.description }}</p>
+              <p class="project-description">
+                {{ projectStats[project.repo]?.description || project.description }}
+              </p>
+              
+              <!-- Project Stats -->
+              <div class="project-stats" v-if="projectStats[project.repo] && !loadingStats[project.repo]">
+                <div class="stat-item">
+                  <span class="stat-icon">⭐</span>
+                  <span class="stat-value">{{ projectStats[project.repo].stars }}</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-icon">🍴</span>
+                  <span class="stat-value">{{ projectStats[project.repo].forks }}</span>
+                </div>
+                <div class="stat-item" v-if="projectStats[project.repo].language">
+                  <span class="language-dot" :style="{ backgroundColor: getLanguageColor(projectStats[project.repo].language) }"></span>
+                  <span class="stat-value">{{ projectStats[project.repo].language }}</span>
+                </div>
+                <div class="stat-item" v-if="projectStats[project.repo].updatedAt">
+                  <span class="stat-value">{{ formatDate(projectStats[project.repo].updatedAt) }}</span>
+                </div>
+              </div>
+              
+              <!-- Loading Stats -->
+              <div class="project-stats loading-stats" v-else-if="loadingStats[project.repo]">
+                <div class="loading-dot"></div>
+                <span class="loading-text">加载项目信息...</span>
+              </div>
+              
               <div class="project-footer">
                 <div class="github-icon-wrapper">
                   <svg class="github-icon" viewBox="0 0 16 16" width="16" height="16">
@@ -65,11 +93,119 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import { useSiteData } from '@/stores/sitedata';
 
 const { siteData } = useSiteData();
 const opensourceData = computed(() => siteData.value?.opensource);
+
+// Project stats interface
+interface ProjectStats {
+  stars: number;
+  forks: number;
+  language: string;
+  updatedAt: string;
+  description: string;
+}
+
+// Store project stats
+const projectStats = ref<Record<string, ProjectStats>>({});
+const loadingStats = ref<Record<string, boolean>>({});
+
+// API endpoints to try (in order of preference)
+const API_ENDPOINTS = [
+  'https://api.github.com/repos',
+  'https://github-api-proxy.vercel.app/api/repos',
+  // Add more proxy endpoints as backup
+];
+
+// Fetch project stats from GitHub API
+const fetchProjectStats = async (repo: string): Promise<ProjectStats | null> => {
+  for (const endpoint of API_ENDPOINTS) {
+    try {
+      const response = await fetch(`${endpoint}/${repo}`, {
+        headers: {
+          'Accept': 'application/vnd.github.v3+json',
+        },
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        return {
+          stars: data.stargazers_count || 0,
+          forks: data.forks_count || 0,
+          language: data.language || 'Unknown',
+          updatedAt: data.updated_at || '',
+          description: data.description || '',
+        };
+      }
+    } catch (error) {
+      console.warn(`Failed to fetch from ${endpoint}: ${error}`);
+      // Continue to next endpoint
+    }
+  }
+  return null;
+};
+
+// Format date
+const formatDate = (dateString: string): string => {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffTime = Math.abs(now.getTime() - date.getTime());
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  
+  if (diffDays === 0) return '今天';
+  if (diffDays === 1) return '昨天';
+  if (diffDays < 30) return `${diffDays}天前`;
+  if (diffDays < 365) return `${Math.floor(diffDays / 30)}个月前`;
+  return `${Math.floor(diffDays / 365)}年前`;
+};
+
+// Get language color
+const getLanguageColor = (language: string): string => {
+  const colors: Record<string, string> = {
+    'JavaScript': '#f1e05a',
+    'TypeScript': '#2b7489',
+    'Python': '#3572A5',
+    'Java': '#b07219',
+    'Go': '#00ADD8',
+    'Rust': '#dea584',
+    'C++': '#f34b7d',
+    'C': '#555555',
+    'PHP': '#4F5D95',
+    'Ruby': '#701516',
+    'Swift': '#ffac45',
+    'Kotlin': '#F18E33',
+    'Dart': '#00B4AB',
+    'C#': '#239120',
+    'Vue': '#4FC08D',
+    'CSS': '#1572B6',
+    'HTML': '#e34c26',
+    'Shell': '#89e051',
+  };
+  return colors[language] || '#586069';
+};
+
+// Load stats for all projects
+onMounted(async () => {
+  if (!opensourceData.value?.projects) return;
+  
+  for (const project of opensourceData.value.projects) {
+    loadingStats.value[project.repo] = true;
+    
+    try {
+      const stats = await fetchProjectStats(project.repo);
+      if (stats) {
+        projectStats.value[project.repo] = stats;
+      }
+    } catch (error) {
+      console.error(`Failed to load stats for ${project.repo}:`, error);
+    } finally {
+      loadingStats.value[project.repo] = false;
+    }
+  }
+});
 </script>
 
 <style scoped>
@@ -257,14 +393,72 @@ const opensourceData = computed(() => siteData.value?.opensource);
   font-size: 0.9rem;
   color: #4a5568;
   line-height: 1.6;
-  margin: 0 0 1rem 0;
-  flex-grow: 1;
+  margin: 0 0 0.8rem 0;
   /* Multi-line text truncation */
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   font-weight: 500;
+}
+
+.project-stats {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem 0;
+  border-top: 1px solid rgba(100, 116, 139, 0.15);
+  border-bottom: 1px solid rgba(100, 116, 139, 0.15);
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.stat-icon {
+  font-size: 0.7rem;
+}
+
+.language-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.stat-value {
+  font-weight: 600;
+}
+
+.loading-stats {
+  justify-content: center;
+  padding: 0.8rem 0;
+}
+
+.loading-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #667eea;
+  animation: pulse 1.5s ease-in-out infinite alternate;
+  margin-right: 0.5rem;
+}
+
+.loading-text {
+  font-size: 0.8rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+@keyframes pulse {
+  from { opacity: 0.4; }
+  to { opacity: 1; }
 }
 
 .project-footer {
@@ -646,6 +840,21 @@ const opensourceData = computed(() => siteData.value?.opensource);
   .project-description {
     font-size: 0.85rem;
     -webkit-line-clamp: 2; /* Show fewer lines on mobile */
+    margin-bottom: 0.6rem;
+  }
+  
+  .project-stats {
+    gap: 0.8rem;
+    padding: 0.4rem 0;
+    margin-bottom: 0.8rem;
+  }
+  
+  .stat-item {
+    font-size: 0.75rem;
+  }
+  
+  .stat-icon {
+    font-size: 0.65rem;
   }
   /* Ensure the more-projects section is visible */
   .more-projects {
