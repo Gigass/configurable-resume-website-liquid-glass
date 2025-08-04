@@ -559,7 +559,7 @@ const handleImageLoad = (event: Event) => {
 
 @media (max-width: 768px) {
   .opensource-view {
-    padding-top: 6rem;
+    padding-top: 4rem; /* 减少顶部内边距 */
     padding-bottom: 2rem;
     min-height: auto; /* Allow content to determine height */
   }

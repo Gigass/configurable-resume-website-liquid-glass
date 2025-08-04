@@ -72,6 +72,13 @@ const currentSlideData = computed(() => {
 
 const startIntroduction = () => {
   introductionStarted.value = true;
+  
+  // 滚动到页面顶部
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+  
   if (swiperRef.value) {
     swiperRef.value.autoplay.start();
     // 立即展开第一个卡片
@@ -648,7 +655,7 @@ onUnmounted(() => {
 .liquidGlass-text {
   z-index: 3;
   color: #1a1a1a;
-  padding: 3.5rem; /* Increased padding for more whitespace */
+  padding: 1.8rem; /* 进一步减少内边距，让布局更紧凑 */
   width: 100%;
 }
 
@@ -658,7 +665,7 @@ onUnmounted(() => {
   font-weight: 700;
   line-height: 1.2;
   color: #1a2330; /* A sophisticated dark blue-gray */
-  margin-bottom: 1.5rem; /* Increased spacing */
+  margin-bottom: 1.2rem; /* 减少标题间距 */
   letter-spacing: -0.02em; /* Tighter letter spacing for large titles */
   text-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
@@ -668,7 +675,7 @@ onUnmounted(() => {
   font-weight: 500; /* Medium weight for distinction */
   line-height: 1.4;
   color: #4a5a6d; /* Softer, elegant gray */
-  margin-bottom: 2rem; /* Increased spacing */
+  margin-bottom: 1.5rem; /* 减少副标题间距 */
   letter-spacing: 0.01em;
 }
 
@@ -774,7 +781,7 @@ onUnmounted(() => {
     transform: none;
     left: auto;
     top: auto;
-    padding: 6rem 1rem 2rem;
+    padding: 4rem 1rem 2rem; /* 减少顶部内边距 */
     display: flex;
     flex-direction: column;
   }
@@ -832,7 +839,7 @@ onUnmounted(() => {
   }
   
   .hero-container {
-    padding: 2rem;
+    padding: 1.2rem; /* 进一步减少手机端hero容器内边距 */
   }
 
   .hero-title {
@@ -848,7 +855,7 @@ onUnmounted(() => {
   }
 
   .liquidGlass-text {
-    padding: 1.5rem;
+    padding: 1rem; /* 进一步减少手机端内边距，让布局更紧凑 */
   }
 
   .reset-btn {

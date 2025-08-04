@@ -194,16 +194,28 @@ nav a:first-of-type {
   width: 100%;
   height: 100%;
   z-index: -1; /* Place it behind all content */
+  /* Safari full screen fixes */
+  width: 100vw;
+  height: 100vh;
+  height: -webkit-fill-available;
+  /* Handle safe areas for notched devices */
+  top: calc(-1 * env(safe-area-inset-top, 0px));
+  left: calc(-1 * env(safe-area-inset-left, 0px));
+  width: calc(100vw + env(safe-area-inset-left, 0px) + env(safe-area-inset-right, 0px));
+  height: calc(100vh + env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px));
 }
 
 @media (max-width: 768px) {
   .header-container {
-    top: 1rem;
-    width: 98%; /* 增加宽度 */
+    top: 0.5rem; /* 减少顶部距离 */
+    width: 95%; /* 稍微减少宽度，给边缘留出空间 */
+    /* 考虑安全区域 */
+    top: max(0.5rem, env(safe-area-inset-top, 0px));
   }
 
   header {
-    padding: 0.5rem 0.5rem; /* 减少内边距，使其更紧凑 */
+    padding: 0.4rem 0.8rem; /* 进一步减少垂直内边距，适当保持水平内边距 */
+    border-radius: 1rem; /* 减小圆角以配合更小的padding */
   }
 
   nav {
@@ -214,7 +226,7 @@ nav a:first-of-type {
 
   nav a {
     font-size: 0.9rem; /* 减小字体 */
-    padding: 0.4rem 0.6rem; /* 调整内边距以适应更小的字体和空间 */
+    padding: 0.3rem 0.6rem; /* 进一步减少垂直内边距 */
   }
 }
 </style>

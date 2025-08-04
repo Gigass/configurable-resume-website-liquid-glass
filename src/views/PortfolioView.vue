@@ -334,7 +334,7 @@ const vStagger = {
 
 @media (max-width: 768px) {
   .portfolio-view {
-    padding-top: 6rem;
+    padding-top: 4rem; /* 减少顶部内边距 */
     padding-bottom: 2rem;
   }
   .content-wrapper {

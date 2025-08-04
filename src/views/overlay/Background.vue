@@ -117,6 +117,7 @@ useRenderLoop().onLoop(({ elapsed }) => {
   <TresCanvas
     clear-color="white"
     :shadows="false"
+    class="full-screen-canvas"
   >
     <TresMesh
       :scale="20"
@@ -141,3 +142,37 @@ useRenderLoop().onLoop(({ elapsed }) => {
     </Levioso>
   </TresCanvas>
 </template>
+
+<style scoped>
+.full-screen-canvas {
+  width: 100% !important;
+  height: 100% !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  /* Ensure it covers the entire container */
+  min-width: 100vw;
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+}
+
+/* Safari specific canvas fixes */
+@supports (-webkit-touch-callout: none) {
+  .full-screen-canvas {
+    min-height: -webkit-fill-available !important;
+  }
+}
+
+/* Handle any TresJS canvas element directly */
+:deep(canvas) {
+  width: 100% !important;
+  height: 100% !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  /* Ensure canvas covers full viewport */
+  min-width: 100vw !important;
+  min-height: 100vh !important;
+  min-height: -webkit-fill-available !important;
+}
+</style>
