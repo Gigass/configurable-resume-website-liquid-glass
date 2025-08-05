@@ -10,6 +10,8 @@
 
 ### 🚀 Quick Start: 3 Steps to Build Your Website (No Coding Needed)
 
+**Live Demo: [https://chris-yang.sufwz.com](https://chris-yang.sufwz.com)**
+
 This guide is for users who are not familiar with programming and want to set up their website in the fastest way possible.
 
 #### Step 1: Download the Pre-built Package
@@ -103,6 +105,8 @@ The output files will be located in the `dist/` directory.
 ## 📖 中文指南
 
 ### 🚀 快速上手：三步搭建您的网站 (无需编程)
+
+**在线演示地址: [https://chris-yang.sufwz.com](https://chris-yang.sufwz.com)**
 
 本指南适用于不熟悉编程、希望最快速搭建网站的用户。
 
